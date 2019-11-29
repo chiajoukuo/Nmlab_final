@@ -4,7 +4,7 @@
 ```
 $ cd Nmlab_final
 $ npm install
-Replace line 44 in ./node_modules/react-dev-utils/ModuleScopePlugin.js with "return true" to enable file access outside of /src
+Replace line 44 in ./node_modules/react-dev-utils/ModuleScopePlugin.js with "return true" to enable js file access to outside of /src
 open ganache GUI
 truffle compile
 truffle migrate
