@@ -1,0 +1,22 @@
+.top_right{
+    text-align:right;
+    margin:5px;
+    
+}
+.top_left{
+    text-align:left;
+    margin:5px;
+    
+}
+.my_page_button{
+    margin:20px;
+}
+.topic{
+    margin-left: 50px;
+}
+.top{
+    display: inline;
+}
+.navbar_div{
+    background-color: 'rgb(36, 33, 33)';
+}

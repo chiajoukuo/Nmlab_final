@@ -1,0 +1,25 @@
+ <html>
+　<head>
+　	<title>圖片頁面</title>
+    <script type="text/javascript">
+    var clicks = 0;
+    function onClick() {
+        clicks += 1;
+        document.getElementById("clicks").innerHTML = clicks;
+    };
+    </script>
+　</head>
+	
+　<body>
+	<a href="https://www.instagram.com/hannahkuo_1119/?hl=zh-tw"><img src="https://www.102like.com/manage/0/product/30802/1516761523_922.jpg"></a>	
+	
+	<h4>日期: 2019/11/26 11:48<p>
+	<input type = "button" value = "購買" onClick="if(confirm('確定要購買嗎?'))this.form.submit();"><br>
+	
+    <button type="button" onClick="onClick()">	讚</button>
+  	: <a id="clicks">0</a><p>
+   
+   	<h4>留言 <input type="text" />
+	 
+ </body> 
+</html>
