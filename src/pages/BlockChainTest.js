@@ -1,7 +1,7 @@
 import React from 'react';
 //modify
 import getWeb3 from "../utils/getWeb3";
-import Picture from "../../build/contracts/Picture.json"
+import Posting from "../../build/contracts/Posting.json"
 
 class BlockChainTest extends React.Component {
   constructor() {
@@ -16,9 +16,9 @@ class BlockChainTest extends React.Component {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = Picture.networks[networkId];
+      const deployedNetwork = Posting.networks[networkId];
       const instance = new web3.eth.Contract(
-        Picture.abi,
+        Posting.abi,
         deployedNetwork && deployedNetwork.address,
       );
       this.setState({ web3, accounts, contract: instance });
