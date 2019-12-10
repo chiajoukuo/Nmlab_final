@@ -43,6 +43,7 @@ class BlockChainTest extends React.Component {
 
   handleRegister= async (event) =>{
    this.setState({texting: await this.state.contract.methods.SayHello().call()});
+   console.log(this.state.accounts[0]);
   }
 
 
