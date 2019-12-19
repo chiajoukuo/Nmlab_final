@@ -11,8 +11,14 @@ contract TestUser{
     string picture_hash = "QmQhK6KAVA2nJgFYzf7D1yHdH11GiGJv6zRTUhoVZwXpDd";
     string name = "Test";
 
+    function testcheckReg_1() public {
+        bool test = user.checkREG(address(this));
+        User user = User(DeployedAddresses.User());
+        Assert.equal(test, false, "failReg");
+    }
+
     function testcreateAuthor() public{
-        //User user = User(DeployedAddresses.User());
+        User user = User(DeployedAddresses.User());
 
         // uint[] memory _ownPosts = new uint[](2);
         // uint[] memory _boughtPosts = new uint[](2);
@@ -28,6 +34,14 @@ contract TestUser{
         Assert.equal(_name, name,"fails_2");
         Assert.equal(ownp, _ownPosts, "fails_3");
         Assert.equal(buyp, _boughtPosts, "fails_4");
+    }
+
+    function testcheckReg() public {
+        User user = User(DeployedAddresses.User());
+
+        bool test = user.checkREG(address(this));
+
+        Assert.equal(test, true, "failReg");
     }
 
     function testsetName() public{
