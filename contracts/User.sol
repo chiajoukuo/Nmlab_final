@@ -12,7 +12,7 @@ contract User{
     }
 
     //ID
-    uint ID = 0;
+    uint ID = 1;
     //map users by address
     mapping(address => Author) public authorAddr_2_Author;
     //map users by name
@@ -36,6 +36,16 @@ contract User{
         _;
     }
 
+    function checkREG (
+        address _addr
+    ) public view returns (bool){
+        bool test = true;
+        if(authorAddr_2_Author[_addr].id == 0) test = false;
+        else test = true;
+
+        return test;
+    }
+
     function createAuthor(
         address _addr,
         string memory _personalPic,
@@ -43,6 +53,9 @@ contract User{
         uint[] memory _ownPosts,
         uint[] memory _boughtPosts
         ) public {
+
+            // require(authorAddr_2_Author[_addr].id == 0, "You have already registered!");
+
             Author memory new_author = Author({
                 user_Addr : _addr,
                 personalPic : _personalPic,
