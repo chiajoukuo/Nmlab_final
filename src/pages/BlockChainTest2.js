@@ -3,10 +3,8 @@ import React from 'react';
 import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
-import BlockChainTest1 from './BlockChainTest1';
-import BlockChainTest2 from './BlockChainTest2';
 
-class BlockChainTest extends React.Component {
+class BlockChainTest2 extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -104,11 +102,9 @@ class BlockChainTest extends React.Component {
         <h2>{this.state.balance}</h2>
         <button onClick={this.handleLike}>CLickLike!</button>
         <button onClick={this.handleCreateAuthor}>CreateAuthor</button>
-        <BlockChainTest1/>
-        <BlockChainTest2/>
       </div>
     );
   }
 }
 
-export default BlockChainTest;
+export default BlockChainTest2;
