@@ -26,9 +26,9 @@ class BlockChainTest extends React.Component {
         User.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      this.setState({ web3, accounts, contract: instance, User: instance1 });
-      this.setState({balance: await this.state.contract.methods.getBalance().call()});
-      await this.state.contract.methods.createPost(12, "I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
+      this.setState({ web3, accounts, posting: instance, User: instance1 });
+      this.setState({balance: await this.state.posting.methods.getBalance().call()});
+      await this.state.posting.methods.createPost(12, "I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
     } catch (error) {
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -41,37 +41,37 @@ class BlockChainTest extends React.Component {
     event.preventDefault();
     const data = new FormData(event.target);
     console.log('Start');
-    await this.state.contract.methods.SetMessage(data.get('username')).send({ from: this.state.accounts[0]});
+    await this.state.posting.methods.SetMessage(data.get('username')).send({ from: this.state.accounts[0]});
     console.log('after set');
-    console.log(await this.state.contract.methods.SayHello().call());
+    console.log(await this.state.posting.methods.SayHello().call());
     console.log('after sayHello');
   }
 
 
   handleRegister= async (event) =>{
    console.log(this.state.accounts[0]);
-   this.setState({texting: await this.state.contract.methods.SayHello().call()});
+   this.setState({texting: await this.state.posting.methods.SayHello().call()});
   }
 
   handleAddUser = async(event) =>{
-    await this.state.contract.methods.addUser(0,0,"0xa916a78C4827b51a179E133634B45e346490c408").send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
-    this.setState({balance: await this.state.contract.methods.getBalance().call()});
+    await this.state.posting.methods.addUser(0,"0xa916a78C4827b51a179E133634B45e346490c408").send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
+    this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
   
   handlePost = async (event) =>{
-    await this.state.contract.methods.createPost(12, "I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
+    await this.state.posting.methods.createPost(12, "I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
   }
 
   handleDonate = async (event) =>{
-    await this.state.contract.methods.donate().send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
-    console.log(await this.state.contract.methods.getBalance.call());
-    this.setState({balance: await this.state.contract.methods.getBalance().call()});
+    await this.state.posting.methods.donate().send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
+    console.log(await this.state.posting.methods.getBalance.call());
+    this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
   handleLike = async (event) =>{
-    await this.state.contract.methods.toggleLikes(0, 0).send({ from: this.state.accounts[0]});
-    this.setState({balance: await this.state.contract.methods.getBalance().call()});
+    await this.state.posting.methods.toggleLikes(0, 0).send({ from: this.state.accounts[0]});
+    this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
 
