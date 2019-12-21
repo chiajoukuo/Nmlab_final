@@ -17,16 +17,17 @@ class BlockChainTest extends React.Component {
       const web3 = await getWeb3();
       const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = Posting.networks[networkId];
+      const PostingdeployedNetwork = Posting.networks[networkId];
+      const UserdeployedNetwork = User.networks[networkId];
       const instance = new web3.eth.Contract(
         Posting.abi,
-        deployedNetwork && deployedNetwork.address,
+        PostingdeployedNetwork && PostingdeployedNetwork.address,
       );
       const instance1 = new web3.eth.Contract(
         User.abi,
-        deployedNetwork && deployedNetwork.address,
+        UserdeployedNetwork && UserdeployedNetwork.address,
       );
-      this.setState({ web3, accounts, posting: instance, User: instance1 });
+      this.setState({ web3, accounts, posting: instance, user: instance1 });
       this.setState({balance: await this.state.posting.methods.getBalance().call()});
       await this.state.posting.methods.createPost(12, "I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
     } catch (error) {
@@ -75,8 +76,11 @@ class BlockChainTest extends React.Component {
   }
 
   handleCreateAuthor = async (event) =>{
-    await this.state.posting.methods.toggleLikes(0, 0).send({ from: this.state.accounts[0]});
-    this.setState({balance: await this.state.posting.methods.getBalance().call()});
+    
+    var arr1 = new Array();
+    var arr2 = new Array();
+
+    await this.state.user.methods.createAuthor(this.state.accounts[0], "haha", "cool",arr1, arr2).send({ from: this.state.accounts[0]});
   }
 
 
