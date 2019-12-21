@@ -74,6 +74,11 @@ class BlockChainTest extends React.Component {
     this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
+  handleCreateAuthor = async (event) =>{
+    await this.state.posting.methods.toggleLikes(0, 0).send({ from: this.state.accounts[0]});
+    this.setState({balance: await this.state.posting.methods.getBalance().call()});
+  }
+
 
   render() {
     return (
@@ -92,6 +97,7 @@ class BlockChainTest extends React.Component {
         <button onClick={this.handleAddUser}>AddUser!</button>
         <h2>{this.state.balance}</h2>
         <button onClick={this.handleLike}>CLickLike!</button>
+        <button onClick={this.handleCreateAuthor}>CreateAuthor</button>
       </div>
     );
   }

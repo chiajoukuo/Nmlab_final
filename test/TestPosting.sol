@@ -32,12 +32,12 @@ contract TestPosting{
         //return  authorID, users, postInfo, likeNum, whoLike, msgNum
         uint authorID;
         string memory pic;
-        uint[] memory users;
+        uint userNum;
         uint[] memory whoLike;
         uint likeNum;
         string memory postInfo;
         uint msgnum;
-        (authorID, pic, users, postInfo, likeNum, whoLike, msgnum) = posting.getPostByID(0);
+        (authorID, userNum, postInfo, likeNum, whoLike, msgnum, pic) = posting.getPostByID(0);
         Assert.equal(postInfo, "I love Hannah #H&J", "Postinfo should be equal");
         Assert.equal(authorID, 15, "AuthorID should be equal");
     }

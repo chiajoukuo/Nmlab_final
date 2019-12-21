@@ -5,7 +5,7 @@ contract Posting {
   struct Post {
     uint authorID;
     string pic;
-    uint[] users;
+    uint userNum;
     uint[] whoLike;
     string postInfo;
     string[] msgs;
@@ -13,7 +13,7 @@ contract Posting {
   }
 
   Post[] public posts;
-  uint price = 1000000000000000;
+  uint price = 10000000000000000;
 
   /******************
     post Basic Part
@@ -31,15 +31,15 @@ contract Posting {
   }
 
   function getPostByID(uint _postID) public view validPostID(_postID) returns(
-    uint, string memory, uint[] memory, string memory, uint, uint[] memory, uint) {
+    uint, uint, string memory, uint, uint[] memory, uint, string memory) {
     return (
       posts[_postID].authorID,
-      posts[_postID].pic,
-      posts[_postID].users,
+      posts[_postID].userNum,
       posts[_postID].postInfo,
       posts[_postID].whoLike.length,
       posts[_postID].whoLike,
-      posts[_postID].msgs.length
+      posts[_postID].msgs.length,
+      posts[_postID].pic
     );
   }
 
@@ -143,16 +143,16 @@ contract Posting {
   /******************
      Post User Part
   *******************/
-  function addUser(uint _postID, uint _user, address payable _userAddr) public payable validPostID(_postID) returns(uint){
+  function addUser(uint _postID, address payable _userAddr) public payable validPostID(_postID) returns(uint){
     require(msg.value>price, "Not enough msg value");
     uint transferMoney = msg.value - price;
     _userAddr.transfer(transferMoney);
-    posts[_postID].users.push(_user);
+    posts[_postID].userNum++;
   }
 
 
-  function getPostUsers(uint _postID) public view validPostID(_postID) returns(uint[] memory) {
-    return posts[_postID].users;
+  function getPostUserNum(uint _postID) public view validPostID(_postID) returns(uint) {
+    return posts[_postID].userNum;
   }
 
 
