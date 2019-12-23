@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 
 contract Posting {
   struct Post {
-    uint authorID;
+    address payable authorID;
     string pic;
     uint userNum;
     uint[] whoLike;
@@ -18,10 +18,10 @@ contract Posting {
   /******************
     post Basic Part
   *******************/
-  function createPost(uint _authorID, string memory _postInfo, string memory _pic) public returns (uint) {
+  function createPost(string memory _postInfo, string memory _pic) public returns (uint) {
     Post memory myPost;
     myPost.pic = _pic;
-    myPost.authorID = _authorID;
+    myPost.authorID = msg.sender;
     myPost.postInfo = _postInfo;
     return (posts.push(myPost));
   }
@@ -31,7 +31,7 @@ contract Posting {
   }
 
   function getPostByID(uint _postID) public view validPostID(_postID) returns(
-    uint, uint, string memory, uint, uint[] memory, uint, string memory) {
+    address, uint, string memory, uint, uint[] memory, uint, string memory) {
     return (
       posts[_postID].authorID,
       posts[_postID].userNum,
@@ -143,13 +143,12 @@ contract Posting {
   /******************
      Post User Part
   *******************/
-  function addUser(uint _postID, address payable _userAddr) public payable validPostID(_postID) returns(uint){
+  function addUser(uint _postID) public payable validPostID(_postID) returns(uint){
     require(msg.value>price, "Not enough msg value");
     uint transferMoney = msg.value - price;
-    _userAddr.transfer(transferMoney);
+    posts[_postID].authorID.transfer(transferMoney);
     posts[_postID].userNum++;
   }
-
 
   function getPostUserNum(uint _postID) public view validPostID(_postID) returns(uint) {
     return posts[_postID].userNum;
