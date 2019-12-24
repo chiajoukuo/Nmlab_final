@@ -9,7 +9,7 @@ contract Posting {
     address[] whoLike;
     string postInfo;
     string[] msgs;
-    uint[] msgOwnerID;
+    address[] msgOwnerID;
   }
 
   Post[] public posts;
@@ -97,7 +97,7 @@ contract Posting {
     return posts[_postID].msgs.length;
   }
 
-  function getSingleMsg(uint _postID, uint _msgID) public view validMsgID(_postID, _msgID) returns(string memory, uint){
+  function getSingleMsg(uint _postID, uint _msgID) public view validMsgID(_postID, _msgID) returns(string memory, address){
     require((_postID<posts.length), "postID out of bound");
     require((_msgID<posts[_postID].msgs.length), "msgID out of bound");
     return (posts[_postID].msgs[_msgID], posts[_postID].msgOwnerID[_msgID]);
@@ -107,9 +107,9 @@ contract Posting {
     posts[_postID].msgs[_msgID] = _msg;
   }
 
-  function addMessage(uint _postID, uint _msgOwnerID, string memory _msg) public validPostID(_postID) {
+  function addMessage(uint _postID, string memory _msg) public validPostID(_postID) {
     posts[_postID].msgs.push(_msg);
-    posts[_postID].msgOwnerID.push(_msgOwnerID);
+    posts[_postID].msgOwnerID.push(msg.sender);
   }
 
   /******************

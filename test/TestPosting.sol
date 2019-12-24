@@ -46,13 +46,13 @@ contract TestPosting{
         Posting posting = Posting(DeployedAddresses.Posting());
         string memory cool = "cool";
         Assert.equal(0, posting.getMsgNum(0), "There should be 0 msg in post 0");
-        posting.addMessage(0, 16, cool);
+        posting.addMessage(0, cool);
         Assert.equal(1, posting.getMsgNum(0), "There should be 1 msg in post 0");
         string memory returnStr;
-        uint msgOwner;
+        address msgOwner;
         (returnStr, msgOwner) = posting.getSingleMsg(0,0);
         Assert.equal(returnStr, cool, "Msg should be equal");
-        Assert.equal(msgOwner, 16, "Msg owner should be equal");
+        Assert.equal(msgOwner, address(this), "Msg owner should be equal");
         posting.updateMsg(0,0,"Hello");
         (returnStr, msgOwner) = posting.getSingleMsg(0,0);
         Assert.equal(returnStr, "Hello", "Msg should be equal");
