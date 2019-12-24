@@ -33,7 +33,7 @@ contract TestPosting{
         address authorID;
         string memory pic;
         uint userNum;
-        uint[] memory whoLike;
+        address[] memory whoLike;
         uint likeNum;
         string memory postInfo;
         uint msgnum;
@@ -60,14 +60,12 @@ contract TestPosting{
 
     function testLIkeOperation() public{
         Posting posting = Posting(DeployedAddresses.Posting());
-        Assert.equal(posting.toggleLikes(0,12), 1, "LikeNum should be 1 after click");
-        Assert.equal(posting.getWhetherUserLike(0,12), true, "Not like");
-        Assert.equal(posting.toggleLikes(0,13), 2, "LikeNum should be 2 after another click");
-        Assert.equal(posting.toggleLikes(0,12), 1, "LikeNum should be 1 after click");
-        Assert.equal(posting.getWhetherUserLike(0,12), false, "Not like");
+        Assert.equal(posting.toggleLikes(0), 1, "LikeNum should be 1 after click");
+        Assert.equal(posting.getWhetherUserLike(0), true, "Not like");
+        Assert.equal(posting.toggleLikes(0), 0, "LikeNum should be 0 after another click");
+        Assert.equal(posting.getWhetherUserLike(0), false, "Not like");
+        Assert.equal(posting.toggleLikes(0), 1, "LikeNum should be 1 after click");
         Assert.equal(posting.getLikeNumByID(0),1, "LikeNUm should be 1");
-        Assert.equal(posting.toggleLikes(0,14), 2, "LikeNum should be 2 after click");
-        Assert.equal(posting.toggleLikes(0,12), 3, "LikeNum should be 3 after click");
     }
 
 /*

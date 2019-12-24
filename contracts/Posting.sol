@@ -6,7 +6,7 @@ contract Posting {
     address payable authorID;
     string pic;
     uint userNum;
-    uint[] whoLike;
+    address[] whoLike;
     string postInfo;
     string[] msgs;
     uint[] msgOwnerID;
@@ -31,7 +31,7 @@ contract Posting {
   }
 
   function getPostByID(uint _postID) public view validPostID(_postID) returns(
-    address, uint, string memory, uint, uint[] memory, uint, string memory) {
+    address, uint, string memory, uint, address[] memory, uint, string memory) {
     return (
       posts[_postID].authorID,
       posts[_postID].userNum,
@@ -119,21 +119,21 @@ contract Posting {
     return posts[_postID].whoLike.length;
   }
 
-  function toggleLikes(uint _postID, uint _user) public validPostID(_postID) refundGasCost returns(uint){
+  function toggleLikes(uint _postID) public validPostID(_postID) refundGasCost returns(uint){
     for (uint i = 0; i < posts[_postID].whoLike.length;i++){
-      if (posts[_postID].whoLike[i] == _user) {
+      if (posts[_postID].whoLike[i] == msg.sender) {
         posts[_postID].whoLike[i] = posts[_postID].whoLike[posts[_postID].whoLike.length-1];
         posts[_postID].whoLike.length--;
         return posts[_postID].whoLike.length;
       }
     }
-    posts[_postID].whoLike.push(_user);
+    posts[_postID].whoLike.push(msg.sender);
     return posts[_postID].whoLike.length;
   }
 
-  function getWhetherUserLike(uint _postID, uint _user) public view validPostID(_postID) returns(bool){
+  function getWhetherUserLike(uint _postID) public view validPostID(_postID) returns(bool){
     for (uint i = 0; i < posts[_postID].whoLike.length;i++){
-      if (posts[_postID].whoLike[i] == _user) {
+      if (posts[_postID].whoLike[i] == msg.sender) {
         return true;
       }
     }
