@@ -31,6 +31,11 @@ contract User{
         string _name
     );
 
+    event changePic(
+        address _user_addr,
+        string _personalPic
+    );
+
     modifier onlyOwner(address _user_addr) {
         require(msg.sender == _user_addr, "sender != owner");
         _;
@@ -82,6 +87,16 @@ contract User{
         authorID_2_Author[_author.id].name = new_Name;
 
         emit changeName(user_addr, new_Name);
+    }
+
+    function setPersonalPic (address user_addr, string memory new_pic) public onlyOwner(user_addr)
+    {
+        Author memory _author = authorAddr_2_Author[user_addr];
+        authorAddr_2_Author[user_addr].personalPic = new_pic;
+        authorName_2_Author[_author.name].personalPic = new_pic;
+        authorID_2_Author[_author.id].personalPic = new_pic;
+
+        emit changePic(user_addr, new_pic);
     }
 
     function getAuthorByID(uint user_ID) public view returns (address, string memory, string memory, uint, uint[] memory, uint[] memory){
