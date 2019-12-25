@@ -63,6 +63,24 @@ contract TestUser{
         Assert.equal(_name, new_name, "set_name fail");
     }
 
+    function testsetPersonalPic() public{
+        User user = User(DeployedAddresses.User());
+        uint[] memory _ownPosts = new uint[](2);
+        uint[] memory _boughtPosts = new uint[](2);
+        string memory picture_hash = "QmQhK6KAVA2nJgFYzf7D1yHdH11GiGJv6zRTUhoVZwXpDd";
+        string memory name = "Test";
+
+        user.createAuthor(address(this), picture_hash, name, _ownPosts, _boughtPosts);
+
+        string memory new_pic = "QmQhK6KAVA2nJgFYzf7D1yHdH11GiGJv6zRTUhoqwryeDd";
+
+        user.setPersonalPic(address(this), new_pic);
+
+        (address addr,string memory pic,string memory _name,uint id,uint[] memory ownp,uint[] memory buyp) = user.getAuthorByAddr(address(this));
+
+        Assert.equal(pic, new_pic, "set_pic fail");
+    }
+
     function testgetAuthorByID() public{
         // User user = User(DeployedAddresses.User());
 
