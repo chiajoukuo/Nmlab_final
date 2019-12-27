@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import HomePage from './pages/HomePage';
+import HomePage from './components/HomePage';
 import Header from './components/Header';
 import { BrowserRouter } from 'react-router-dom';
 import TestPage from './pages/TestPage';
@@ -13,6 +13,8 @@ import PrivatePage from './pages/PrivatePage'
 import PublicPage from './pages/PublicPage'
 import LoginPage from './pages/LoginPage';
 import UploadPage from './pages/UploadPage';
+import SettingPage from './pages/SettingPage';
+import NewPostPage from './pages/NewPostPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePage_IG from './pages/IG/HomePage_IG'
 
@@ -30,12 +32,16 @@ function App() {
           <Switch>
             {/* <Route exact path='/' component={Header}>
             </Route> */}
-            <Route exact path='/' component={HomePage_IG}></Route>
+            <Route exact path='/' component={SettingPage}></Route>
+            <Route exact path='/home' component={HomePage_IG}></Route>
             <Route exact path='/test' component={PicturePage}></Route>
+            <Route path="/posts/:id?" component={PicturePage} />
             <Route exact path='/profile' component={PrivatePage}></Route>
             <Route exact path='/public_profile' component={PublicPage}></Route>
             {/* <Route exact path='/login' component={LoginPage}></Route> */}
             <Route exact path='/upload' component={UploadPage}></Route>
+            <Route exact path='/new_post' component={NewPostPage}></Route>
+
             
           </Switch>
           

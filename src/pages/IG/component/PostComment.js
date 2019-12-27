@@ -12,7 +12,7 @@ class PostComment extends Component{
             //photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJD234X-jvOa02sAtzRAUEyUX4btIKp2er-XjTpUq1tdJWJk47ew&s',
             photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAA-u2TP3HI65VnMvSUjEjU4bSxS7E4AKM4Qr3kSFzDzdNUmPrSA&s',
             name: 'ebi',
-            text: 'This is a testing comment. This is a testing comment. This is a testing comment.'
+            text: this.props.text//'This is a testing comment. This is a testing comment. This is a testing comment.'
         };
     }
     render(){

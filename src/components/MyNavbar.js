@@ -51,7 +51,7 @@ class MyNavbar extends Component {
         <div className='navbar_div'>
           <Navbar color="dark" dark expand="sm"  >
             <Container>
-              <NavbarBrand href='/'>Home</NavbarBrand>
+              <NavbarBrand href='/home'>Home</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="mr-auto" navbar>
@@ -69,6 +69,9 @@ class MyNavbar extends Component {
                 </Nav>
                 <Nav className='ml-auto' navbar>
                   {/* {isAuthenticated ? authLinks : null} */}
+                  <NavItem>
+                    <NavLink href="/new_post" style={{ fontSize: "1.2rem" }}>Post</NavLink>
+                  </NavItem>
                   <NavItem>
                     <NavLink href="/upload" style={{ fontSize: "1.2rem" }}>Upload</NavLink>
                   </NavItem>

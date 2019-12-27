@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, Switch, Route, Redirect, Link } from "react-router-dom";
 //import Routes from '../routes';
 import "../css/grid_style.css"
-import HomePage from '../pages/HomePage'
+import HomePage from './HomePage'
 import TestPage from '../pages/TestPage'
 
 

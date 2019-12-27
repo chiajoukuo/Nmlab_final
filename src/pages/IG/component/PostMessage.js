@@ -20,6 +20,13 @@ class PostMessage extends Component{
         this.setState({ [e.target.name]: e.target.value });
         //console.log(this.state.text)
     };
+    handleKeyDown = e => {
+        if (e.key === 'Enter') {
+            this.setState({
+                text:''
+            })
+        }
+    }
     render(){
         return(
             <div className='post_comment'>
@@ -44,6 +51,7 @@ class PostMessage extends Component{
                                 className="mb-3"
                                 placeholder="Leave a message."
                                 onChange={this.onChange}
+                                onKeyDown={this.handleKeyDown}
                                 required
                             />
                     </div> 

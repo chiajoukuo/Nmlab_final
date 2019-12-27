@@ -7,7 +7,7 @@ class PostContent extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            content:'This is a testing content and I don know what to say. Blah blah blah blah blah.'
+            content:this.props.content//'This is a testing content and I don know what to say. Blah blah blah blah blah.'
         };
     }
     render(){

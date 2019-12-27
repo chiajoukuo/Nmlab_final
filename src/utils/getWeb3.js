@@ -3,8 +3,11 @@ import Web3 from "web3";
 // Reference: https://github.com/truffle-box/react-box/blob/master/client/src/utils/getWeb3.js
 const getWeb3 = () =>
   new Promise((resolve, reject) => {
+    console.log("web3_1")
     // Wait for loading completion to avoid race conditions with web3 injection timing.
     window.addEventListener("load", async () => {
+      console.log("web3_2")
+
       // Modern dapp browsers...
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
@@ -33,6 +36,8 @@ const getWeb3 = () =>
         console.log("No web3 instance injected, using Local web3.");
         resolve(web3);
       }
+      console.log("web3_3")
+
     });
   });
 

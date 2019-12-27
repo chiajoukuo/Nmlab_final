@@ -23,6 +23,7 @@ class ImageUploader extends Component{
         super(props);
         this.state = {
             url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
+            url_input:'',
             modal:false,
             value:0
         };
@@ -80,7 +81,7 @@ class ImageUploader extends Component{
     upload = e => {
         this.setState({
             isUploading: true,
-            isUploaded: false
+            isUploaded: false,
         });
         // e.preventDefault();
         // let formData = new FormData();
@@ -90,8 +91,13 @@ class ImageUploader extends Component{
     };
     onSubmit = e => {
         // e.preventDefault();
-        if (this.state.url !== "") {
-            console.log(this.state.url)
+        if (this.state.url_input !== "") {
+            //console.log(this.state.url_input)
+            this.setState({
+                url:this.state.url_input,
+                url_input:''
+            })
+            
             // const newImage = {
             //     url: this.state.url
             // };
@@ -145,10 +151,10 @@ class ImageUploader extends Component{
                                 <FormGroup>
                                     <Label for="url">Image URL</Label>
                                     <Input
-                                    value={this.state.url}
+                                    value={this.state.url_input}
                                     type="text"
-                                    name="url"
-                                    id="url"
+                                    name="url_input"
+                                    //id="url"
                                     className="mb-3"
                                     placeholder="please enter Image URL"
                                     onChange={this.onChange}

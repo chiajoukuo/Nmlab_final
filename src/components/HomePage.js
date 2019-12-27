@@ -68,7 +68,7 @@ class HomePage extends Component{
                         <figure key={element.src} className="image">
                             <Link to="/test">
                                 <img src={element.src} alt={element.text}/>  
-                                <figcaption>{element.text}</figcaption>
+                                {/* <figcaption>{element.text}</figcaption> */}
                             </Link>
                         </figure>
                         
