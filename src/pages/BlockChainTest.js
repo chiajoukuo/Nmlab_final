@@ -4,12 +4,35 @@ import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
 
+const ipfsAPI = require('ipfs-api');
+const ipfs = ipfsAPI({
+  host: 'localhost',
+  port: '5001',
+  protocol: 'http'
+});
+
+let saveImageToIPFS = (reader) => {
+  return new Promise(function(resolve, reject) {
+      const buffer = Buffer.from(reader.result);
+      console.log(buffer)
+      
+      ipfs.add(buffer).then((response) => {
+      console.log(response)
+      resolve(response[0].hash);
+   }).catch((err) => {
+      console.error(err)
+      reject(err);
+   })
+})
+}
+
 class BlockChainTest extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
-    this.state = {texting: 'Hello world', balance: 0};
+    this.handleUpload = this.handleUpload.bind(this);
+    this.state = {texting: 'Hello world', balance: 0, imageHash: null};
   }
 
   componentDidMount = async () => {
@@ -88,6 +111,17 @@ class BlockChainTest extends React.Component {
     await this.state.user.methods.createAuthor(this.state.accounts[0], "haha", "cool",arr1, arr2).send({ from: this.state.accounts[0]});
   }
 
+  handleUpload = async (event) =>{
+    console.log(this.state.accounts[0]);
+    const filesAdded = await ipfs.add({
+      path: 'hello.txt',
+      content: Buffer.from('Hello World 101')
+    })
+    console.log('Added file:', filesAdded[0].path, filesAdded[0].hash)
+    const fileBuffer = await ipfs.cat(filesAdded[0].hash)
+    console.log('Added file contents:', fileBuffer.toString())
+   }
+
 
   render() {
     return (
@@ -107,6 +141,32 @@ class BlockChainTest extends React.Component {
         <h2>{this.state.balance}</h2>
         <button onClick={this.handleLike}>CLickLike!</button>
         <button onClick={this.handleCreateAuthor}>CreateAuthor</button>
+
+        <div style={{marginTop:10}}>上传图片到IPFS：</div>
+        <div>
+          <label id="file">选择图片</label>
+          <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
+        </div>
+        <button onClick={this.handleUpload}>Try</button>
+        <button style={{marginTop:10}} onClick={() => {
+        var file = this.refs.file.files[0];
+        console.log(file);
+        var reader = new FileReader();
+        reader.readAsArrayBuffer(file)
+        reader.onloadend = function(e) {
+          console.log(reader);
+          console.log(this.refs.file.files);
+          
+          saveImageToIPFS(reader).then((hash) => {
+            console.log(hash);
+            this.setState({imageHash: hash})
+          });
+            }.bind(this);
+            
+           }}>开始上传</button>
+           <div>{"http://localhost:8080/ipfs/" + this.state.imageHash}</div>
+           <img alt="" style={{width: 100, height: 100 }} src={"http://localhost:8080/ipfs/" + this.state.imageHash}/>
+           <div> "cool"</div>
       </div>
     );
   }
