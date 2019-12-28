@@ -6,7 +6,6 @@ import {
     ModalBody,
     Form,
     FormGroup,
-    FormText,
     Label,
     Input
   } from "reactstrap";
@@ -72,6 +71,7 @@ class ImageUploader extends Component{
             <img
               src="https://image.flaticon.com/icons/svg/179/179372.svg"
               style={{ width: "24px", margin: "3px", marginRight: "1rem" }}
+              alt='uploading'
             />
           );
         } else {
@@ -115,7 +115,7 @@ class ImageUploader extends Component{
             <>
                 <div className="Post-image">
                     <div className="Post-image-bg">
-                        <img alt="Upload your own image." src={this.state.url} onClick={this.toggle } className='uploader'/>
+                        <img alt="Upload your own." src={this.state.url} onClick={this.toggle } className='uploader'/>
                     </div>
                 </div>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>

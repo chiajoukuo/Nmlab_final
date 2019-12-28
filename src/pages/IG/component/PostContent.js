@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import './IG_style.css';
-import {Link } from "react-router-dom";
 
 
 class PostContent extends Component{

@@ -3,8 +3,6 @@ import React from 'react';
 import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
-import BlockChainTest1 from './BlockChainTest1';
-import BlockChainTest2 from './BlockChainTest2';
 
 class BlockChainTest extends React.Component {
   constructor() {
@@ -82,8 +80,10 @@ class BlockChainTest extends React.Component {
 
   handleCreateAuthor = async (event) =>{
     
-    var arr1 = new Array();
-    var arr2 = new Array();
+    // var arr1 = new Array();
+    // var arr2 = new Array();
+    var arr1 = []
+    var arr2 = []
 
     await this.state.user.methods.createAuthor(this.state.accounts[0], "haha", "cool",arr1, arr2).send({ from: this.state.accounts[0]});
   }
@@ -107,8 +107,6 @@ class BlockChainTest extends React.Component {
         <h2>{this.state.balance}</h2>
         <button onClick={this.handleLike}>CLickLike!</button>
         <button onClick={this.handleCreateAuthor}>CreateAuthor</button>
-        <BlockChainTest1/>
-        <BlockChainTest2/>
       </div>
     );
   }

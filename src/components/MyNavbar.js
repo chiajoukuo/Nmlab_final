@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component} from 'react';
 import {
   Collapse,
   Container,
@@ -10,14 +10,11 @@ import {
   NavItem,
 } from 'reactstrap';
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
 } from 'reactstrap';
-import PropTypes from 'prop-types';
 import { IoLogoGithub } from "react-icons/io";
-import UploadButton from './UploadButton';
 import '../css/style.css'
 
 class MyNavbar extends Component {

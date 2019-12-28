@@ -11,7 +11,8 @@ class PostComment extends Component{
             // photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRotgz4yc_xXRhhT5kpys0H-QwZwfzhvTyA8jNjbhRxlNNe1Za1&s',
             //photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJD234X-jvOa02sAtzRAUEyUX4btIKp2er-XjTpUq1tdJWJk47ew&s',
             photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAA-u2TP3HI65VnMvSUjEjU4bSxS7E4AKM4Qr3kSFzDzdNUmPrSA&s',
-            name: 'ebi',
+            name: this.props.author,//'ebi',
+            link: '/public_profile/'+this.props.authorID,
             text: this.props.text//'This is a testing comment. This is a testing comment. This is a testing comment.'
         };
     }
@@ -20,7 +21,7 @@ class PostComment extends Component{
             <div className='post_comment'>
                 {/* <div>{this.props.comment_id} comment</div> */}
                 <div className="comment-user">
-                    <Link to="/public_profile" className="comment-user-link">
+                    <Link to={this.state.link} className="comment-user-link">
                         <div className="comment-avatar">
                             <img src={this.state.photo} alt={this.state.name} />
                         </div>

@@ -4,7 +4,6 @@ import PostImage from './PostImage';
 import PostContent from './PostContent';
 import PostButton from './PostButton';
 import './IG_style.css';
-import { thisExpression } from '@babel/types';
 
 class Post extends Component{
     constructor(props) {

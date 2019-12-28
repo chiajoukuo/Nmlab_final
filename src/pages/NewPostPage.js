@@ -1,9 +1,9 @@
 import React from 'react';
-import PostHead from './IG/component/PostHead';
-import PostImage from './IG/component/PostImage';
-import PostButton from './IG/component/PostButton';
-import PostContent from './IG/component/PostContent';
-import PostComments from './IG/component/PostComments';
+// import PostHead from './IG/component/PostHead';
+// import PostImage from './IG/component/PostImage';
+// import PostButton from './IG/component/PostButton';
+// import PostContent from './IG/component/PostContent';
+// import PostComments from './IG/component/PostComments';
 import ImageUploader from '../components/ImageUploader';
 import {Input} from "reactstrap";
 import './IG/component/IG_style.css'
@@ -47,11 +47,11 @@ class NewPostPage extends React.Component {
               </div> */}
               <ImageUploader />
               <div className='post_buttons'>
-                <img className='like_button_static' src='https://image.flaticon.com/icons/svg/149/149217.svg'/>
+                <img className='like_button_static' src='https://image.flaticon.com/icons/svg/149/149217.svg' alt='like_button_static'/>
                 <span className='like_num'>0</span>
-                <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg'/>
+                <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg' alt='message_button'/>
                 <span className='like_num'>0</span>
-                <img className='purchase_button_static' src='https://image.flaticon.com/icons/svg/1170/1170678.svg'/>
+                <img className='purchase_button_static' src='https://image.flaticon.com/icons/svg/1170/1170678.svg' alt='purchase_button'/>
                 <span className='like_num'>0</span>
               </div>
               <div className='post_content'>

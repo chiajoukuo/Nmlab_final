@@ -1,6 +1,6 @@
 import React from 'react';
 import HomePage from '../components/HomePage'
-import BoutImages from '../components/BoughtImages'
+import BoughtImages from '../components/BoughtImages'
 
 class PrivatePage extends React.Component {
     constructor(props) {
@@ -33,14 +33,14 @@ class PrivatePage extends React.Component {
 
             <h1 className='profile_author'>My posts</h1>
             <div className='between'></div>
-            <BoutImages></BoutImages>
+            <BoughtImages></BoughtImages>
             <div className='between'></div>
             <div className='between'></div>
             <div className='between'></div>
 
             <h1 className='profile_author'>images I bought</h1>
             <div className='between'></div>
-            <BoutImages></BoutImages>
+            <BoughtImages></BoughtImages>
             <div className='between'></div>
         </div>
       );

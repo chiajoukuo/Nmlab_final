@@ -8,7 +8,7 @@ class PostHead extends Component{
         super(props);
         this.state = {
             photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
-            name: 'AUTHOR' //this.props.author,
+            name: this.props.author//'AUTHOR' //
 
         };
     }

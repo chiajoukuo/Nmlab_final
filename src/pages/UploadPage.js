@@ -11,7 +11,6 @@ import {
     ModalBody,
     Form,
     FormGroup,
-    FormText,
     Label,
     Input
   } from "reactstrap";
@@ -20,7 +19,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
 
@@ -44,7 +42,8 @@ class UploadPage extends React.Component {
 
     asynConstructor = async () => {
       try {
-          const web3 = await getWeb3();
+          const web3 = this.props.web3
+          console.log('herere', web3)
           const accounts = await web3.eth.getAccounts();
           const networkId = await web3.eth.net.getId();
           const PostingdeployedNetwork = Posting.networks[networkId];
@@ -140,6 +139,7 @@ class UploadPage extends React.Component {
           return (
             <img
               src="https://image.flaticon.com/icons/svg/179/179372.svg"
+              alt='uploading'
               style={{ width: "24px", margin: "3px", marginRight: "1rem" }}
             />
           );
@@ -178,17 +178,17 @@ class UploadPage extends React.Component {
 
               <div className="Post-image">
                   <div className="Post-image-bg">
-                      <img alt="Upload your own image." src={this.state.url} onClick={this.toggle } className='uploader'/>
+                      <img alt="Upload your own." src={this.state.url} onClick={this.toggle } className='uploader'/>
                   </div>
               </div>
 
 
               <div className='post_buttons'>
-                <img className='like_button_static' src='https://image.flaticon.com/icons/svg/149/149217.svg'/>
+                <img className='like_button_static' src='https://image.flaticon.com/icons/svg/149/149217.svg' alt='like_button'/>
                 <span className='like_num'>0</span>
-                <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg'/>
+                <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg' alt='message_button'/>
                 <span className='like_num'>0</span>
-                <img className='purchase_button_static' src='https://image.flaticon.com/icons/svg/1170/1170678.svg'/>
+                <img className='purchase_button_static' src='https://image.flaticon.com/icons/svg/1170/1170678.svg' alt='pyrchase_button'/>
                 <span className='like_num'>0</span>
               </div>
 

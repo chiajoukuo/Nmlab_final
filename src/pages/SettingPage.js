@@ -1,12 +1,9 @@
 import React,{Component} from 'react';
-import Post from './IG/component/Post';
 import './IG/component/IG_style.css'
 import '../css/style.css'
 import {Button,Input} from "reactstrap";
-import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
-
 
 class SettingPage extends Component{
     constructor(props) {
@@ -23,7 +20,8 @@ class SettingPage extends Component{
     }
     asynConstructor = async () => {
         try {
-            const web3 = await getWeb3();
+            const web3 = this.props.web3
+            console.log('web33',web3)
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
             const PostingdeployedNetwork = Posting.networks[networkId];
@@ -55,8 +53,10 @@ class SettingPage extends Component{
     };
     async save_setting () {
         //await this.state.posting.methods.SetMessage(this.state.user_input).send({ from: this.state.accounts[0]});
-        var arr1 = new Array();
-        var arr2 = new Array();
+        // var arr1 = new Array();
+        // var arr2 = new Array();
+        var arr1=[]
+        var arr2=[]
         const REG = await this.state.user.methods.checkREG(this.state.accounts[0]).call()
         console.log(REG)
         if(REG){

@@ -1,11 +1,10 @@
 import React,{Component} from 'react';
 import Post from './component/Post';
 import './component/IG_style.css'
-import getWeb3 from "../../utils/getWeb3";
 import Posting from "../../../build/contracts/Posting.json"
 import User from "../../../build/contracts/User.json"
 
-class HomePage_IG extends Component{
+class HomePageIG extends Component{
     constructor(props) {
         super(props);
         this.asynConstructor = this.asynConstructor.bind(this);
@@ -20,20 +19,20 @@ class HomePage_IG extends Component{
 
     asynConstructor = async () => {
         try {
-            const web3 = await getWeb3();
+            const web3 = this.props.web3//await getWeb3();
             const accounts = await web3.eth.getAccounts();
             const networkId = await web3.eth.net.getId();
-            const deployedNetwork = Posting.networks[networkId];
+            const PostingdeployedNetwork = Posting.networks[networkId];
+            const UserdeployedNetwork = User.networks[networkId];
             const instance = new web3.eth.Contract(
                 Posting.abi,
-                deployedNetwork && deployedNetwork.address,
+                PostingdeployedNetwork && PostingdeployedNetwork.address,
             );
-            // const instance1 = new web3.eth.Contract(
-            //     User.abi,
-            //     deployedNetwork && deployedNetwork.address,
-            // );
-            // this.setState({ web3, accounts, contract: instance, User: instance1 });
-            this.setState({ web3, accounts, contract: instance ,});
+            const instance1 = new web3.eth.Contract(
+                User.abi,
+                UserdeployedNetwork && UserdeployedNetwork.address,
+            );
+            this.setState({ web3, accounts, posting: instance, user: instance1 });
 
         } catch (error) {
             alert(
@@ -41,16 +40,19 @@ class HomePage_IG extends Component{
             );
             console.error(error);
         }
-        var num = await this.state.contract.methods.getPostNum().call();
+        var num = await this.state.posting.methods.getPostNum().call();
         var i;
         var posts_id = []
         var posts_tmp = []
         var likes = []
+        var authors = []
         //;console.log(await this.state.contract.methods.getPostByID(0).call())
         for (i = 0; i < num; i++) {
-            var post_tmp = await this.state.contract.methods.getPostByID(i).call()
-            //console.log(post_tmp)
-            var like = await this.state.contract.methods.getWhetherUserLike(i).call()
+            var post_tmp = await this.state.posting.methods.getPostByID(i).call()
+
+            var like = await this.state.posting.methods.getWhetherUserLike(i).call()
+            var author = await this.state.user.methods.getAuthorByAddr(post_tmp[0]).call()
+            var author_name = author[2]
             //post_tmp.push(like)
             // var authorID = post_tmp[0]
             // var userNum = post_tmp[1]
@@ -61,14 +63,15 @@ class HomePage_IG extends Component{
             //console.log(post_tmp)
             posts_tmp.push(post_tmp)
             likes.push(like)
-            console.log(i,posts_tmp[i][3])
+            authors.push(author_name)
             posts_id.push(i)
         }
         this.setState({
             post_num : num,
             posts_id: posts_id,
             posts: posts_tmp,
-            likes : likes
+            likes : likes,
+            authors : authors
         })
         //console.log(this.state.posts[0])
         
@@ -81,6 +84,7 @@ class HomePage_IG extends Component{
         //     console.log(this.state.posts[0][0])
         // }
         //console.log(this.state.posts.length)
+        console.log(this.state.authors)
         return(
             <div className='homepage_ig'>
                 {this.state.posts_id.map(
@@ -93,7 +97,7 @@ class HomePage_IG extends Component{
                                     <Post 
                                         post_id={post_id_element}
                                         authorID = {this.state.posts[post_id_element][0]}
-                                        author = "author_"
+                                        author = {this.state.authors[post_id_element]}
                                         userNum = {this.state.posts[post_id_element][1]}
                                         postInfo = {this.state.posts[post_id_element][2]}
                                         like = {this.state.likes[post_id_element]}
@@ -121,4 +125,4 @@ class HomePage_IG extends Component{
     
 }
 
-export default HomePage_IG;
+export default HomePageIG;
