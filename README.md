@@ -1,5 +1,8 @@
 # Nmlab_final
-
+### Prerequisite:
+1. [Install truffle](https://www.trufflesuite.com/truffle)
+2. [Ganarche_cli](https://github.com/trufflesuite/ganache-cli)
+3. [IPFS](https://www.jianshu.com/p/48a2739bade2)
 ### How to use
 ```
 $ cd Nmlab_final
