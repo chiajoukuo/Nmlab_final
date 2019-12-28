@@ -10,13 +10,14 @@ class PostComment extends Component{
         this.state = {
             // photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRotgz4yc_xXRhhT5kpys0H-QwZwfzhvTyA8jNjbhRxlNNe1Za1&s',
             //photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJD234X-jvOa02sAtzRAUEyUX4btIKp2er-XjTpUq1tdJWJk47ew&s',
-            photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAA-u2TP3HI65VnMvSUjEjU4bSxS7E4AKM4Qr3kSFzDzdNUmPrSA&s',
+            photo:this.props.author_pic,//'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAA-u2TP3HI65VnMvSUjEjU4bSxS7E4AKM4Qr3kSFzDzdNUmPrSA&s',
             name: this.props.author,//'ebi',
             link: '/public_profile/'+this.props.authorID,
             text: this.props.text//'This is a testing comment. This is a testing comment. This is a testing comment.'
         };
     }
     render(){
+        console.log(this.props.author_pic)
         return(
             <div className='post_comment'>
                 {/* <div>{this.props.comment_id} comment</div> */}

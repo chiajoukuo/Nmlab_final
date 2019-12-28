@@ -1,9 +1,6 @@
 import React from 'react';
-//import ImageUploader from '../components/ImageUploader';
-//import {Input, Button} from "reactstrap";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import './IG/component/IG_style.css'
-
 import {
     Button,
     Modal,
@@ -19,15 +16,16 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import Posting from "../../build/contracts/Posting.json"
-import User from "../../build/contracts/User.json"
-
 
 class UploadPage extends React.Component {
     constructor(props) {
       super(props);
       
       this.state = {
+        web3:this.props.web3,
+        accounts:this.props.accounts,
+        posting:this.props.posting,
+        user:this.props.user,
         photo:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
         name:'AUTHOR',
         content:'',
@@ -36,33 +34,33 @@ class UploadPage extends React.Component {
         modal:false,
         value:0
       };
-      this.asynConstructor();
+      //this.asynConstructor();
       
     }
 
-    asynConstructor = async () => {
-      try {
-          const web3 = this.props.web3
-          console.log('herere', web3)
-          const accounts = await web3.eth.getAccounts();
-          const networkId = await web3.eth.net.getId();
-          const PostingdeployedNetwork = Posting.networks[networkId];
-          const UserdeployedNetwork = User.networks[networkId];
-          const instance = new web3.eth.Contract(
-            Posting.abi,
-            PostingdeployedNetwork && PostingdeployedNetwork.address,
-          );
-          const instance1 = new web3.eth.Contract(
-            User.abi,
-            UserdeployedNetwork && UserdeployedNetwork.address,
-          );
-          this.setState({ web3, accounts, posting: instance, user: instance1 });
-      } catch (error) {
-          alert(
-              `Failed to load web3, accounts, or contract. Check console for details.`,
-          );
-          console.error(error);
-      }
+    UNSAFE_componentWillMount = async () => {
+      // try {
+      //     const web3 = this.props.web3
+      //     console.log('herere', web3)
+      //     const accounts = await web3.eth.getAccounts();
+      //     const networkId = await web3.eth.net.getId();
+      //     const PostingdeployedNetwork = Posting.networks[networkId];
+      //     const UserdeployedNetwork = User.networks[networkId];
+      //     const instance = new web3.eth.Contract(
+      //       Posting.abi,
+      //       PostingdeployedNetwork && PostingdeployedNetwork.address,
+      //     );
+      //     const instance1 = new web3.eth.Contract(
+      //       User.abi,
+      //       UserdeployedNetwork && UserdeployedNetwork.address,
+      //     );
+      //     this.setState({ web3, accounts, posting: instance, user: instance1 });
+      // } catch (error) {
+      //     alert(
+      //         `Failed to load web3, accounts, or contract. Check console for details.`,
+      //     );
+      //     console.error(error);
+      // }
 
       var author = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
       console.log(author)

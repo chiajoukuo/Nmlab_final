@@ -7,15 +7,15 @@ class PostHead extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
-            name: this.props.author//'AUTHOR' //
-
+            photo: this.props.pic,//'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
+            name: this.props.author,//'AUTHOR' //
+            link: '/public_profile/'+this.props.authorAddr,
         };
     }
     render(){
         return(
             <header className='post_head'>
-                <Link to="/public_profile" className="Post-user">
+                <Link to={this.state.link} className="Post-user">
                     <div className="Post-user-avatar">
                         <img src={this.state.photo} alt={this.state.name} />
                     </div>

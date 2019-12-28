@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 //modify
-import BlockChainTest from './pages/BlockChainTest';
+//import BlockChainTest from './pages/BlockChainTest';
 
 
 ReactDOM.render(<App style={{backgroundColor: 'rgb(36, 33, 33)', height:'100%'}}/>, document.getElementById('root'));

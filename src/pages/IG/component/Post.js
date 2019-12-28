@@ -10,8 +10,9 @@ class Post extends Component{
         super(props);
         this.state = {
             post_id: this.props.post_id,
-            authorID : this.props.authorID,
+            authorAddr : this.props.authorID,
             author : this.props.author,
+            author_pic: this.props.author_pic,
             postInfo : this.props.postInfo,
             like : this.props.like,
             likeNum : this.props.likeNum,
@@ -25,9 +26,18 @@ class Post extends Component{
         return(
             <article className="Post" ref="Post">
                 {/* <Route exact path='/test' component={PicturePage}></Route> */}
-                <PostHead authorID = {this.state.authorID} author ={this.state.author} />
+                <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author} pic={this.state.author_pic}/>
                 <PostImage pic = {this.state.pic} postID = {this.state.post_id}/>
-                <PostButton like = {this.state.like} likeNum = {this.state.likeNum} msgNum = {this.state.msgNum} userNum = {this.state.userNum} postID = {this.state.post_id} web3={this.props.web3}/>
+                <PostButton 
+                    like = {this.state.like} 
+                    likeNum = {this.state.likeNum} 
+                    msgNum = {this.state.msgNum} 
+                    userNum = {this.state.userNum} 
+                    postID = {this.state.post_id} 
+                    web3={this.props.web3}
+                    posting={this.props.posting} 
+                    user={this.props.user} 
+                    accounts={this.props.accounts}/>
                 <PostContent content = {this.state.postInfo}/>
             </article>
         );

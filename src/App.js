@@ -13,6 +13,8 @@ import NewPostPage from './pages/NewPostPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePageIG from './pages/IG/HomePage_IG'
 import getWeb3 from "./utils/getWeb3";
+import Posting from "../build/contracts/Posting.json"
+import User from "../build/contracts/User.json"
 
 class App extends React.Component {
   constructor() {
@@ -25,10 +27,24 @@ class App extends React.Component {
   UNSAFE_componentWillMount = async () => {
     try {
       const web3 = await getWeb3();
-      this.setState({
-        web3:web3
-      })
-      this.setState({OK:1})
+      const accounts = await web3.eth.getAccounts();
+      const networkId = await web3.eth.net.getId();
+      const PostingdeployedNetwork = Posting.networks[networkId];
+      const UserdeployedNetwork = User.networks[networkId];
+      const instance = new web3.eth.Contract(
+          Posting.abi,
+          PostingdeployedNetwork && PostingdeployedNetwork.address,
+      );
+      const instance1 = new web3.eth.Contract(
+          User.abi,
+          UserdeployedNetwork && UserdeployedNetwork.address,
+      );
+      this.setState({ 
+          web3, accounts, 
+          posting: instance, 
+          user: instance1,
+          OK:1
+      });
     } catch (error) {
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -47,13 +63,13 @@ class App extends React.Component {
             </div>
             <div className="App">
               <Switch>
-                <Route exact path='/' render={(props) => <SettingPage {...props} web3={this.state.web3}/>} />
-                <Route exact path='/home' render={(props) => <HomePageIG {...props} web3={this.state.web3}/>} />
-                <Route exact path='/test' component={PicturePage}/>
-                <Route path="/posts/:id?" render={(props) => <PicturePage {...props} web3={this.state.web3}/>} />
-                <Route exact path='/upload' render={(props) => <UploadPage {...props} web3={this.state.web3}/>} />
+                <Route exact path='/' render={(props) => <SettingPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
+                <Route exact path='/home' render={(props) => <HomePageIG {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
+                <Route exact path='/test' component={PicturePage} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>
+                <Route path="/posts/:id?" render={(props) => <PicturePage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
+                <Route exact path='/upload' render={(props) => <UploadPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
 
-                <Route exact path='/profile' component={PrivatePage}></Route>
+                <Route exact path='/profile' render={(props) => <PrivatePage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/public_profile/:id?' component={PublicPage}></Route>
                 <Route exact path='/new_post' component={NewPostPage}></Route>
               </Switch>

@@ -6,15 +6,16 @@ import {
     ModalBody
 } from 'reactstrap';
 import './IG_style.css';
-import Posting from "../../../../build/contracts/Posting.json"
-import User from "../../../../build/contracts/User.json"
-
 
 class PostButton extends Component{
     
     constructor(props) {
         super(props);
         this.state = {
+            web3:this.props.web3,
+            accounts:this.props.accounts,
+            posting:this.props.posting,
+            user:this.props.user,
             post_id:this.props.postID,
             like_num:this.props.likeNum,//0,
             like:this.props.like,//false,
@@ -23,8 +24,6 @@ class PostButton extends Component{
             bought_num:this.props.userNum,//0,
             modal:false,
         };
-        this.asynConstructor = this.asynConstructor.bind(this);
-        this.asynConstructor();
         this.src=[
             'https://image.flaticon.com/icons/svg/149/149217.svg',
             'https://image.flaticon.com/icons/svg/148/148836.svg'
@@ -34,31 +33,7 @@ class PostButton extends Component{
         
        
     }
-    asynConstructor = async () => {
-        
-        try {
-            console.log("button 1")
-            const web3 = this.props.web3;//this.props.web3;//await getWeb3();
-            console.log("button 2")
-            const accounts = await web3.eth.getAccounts();
-            const networkId = await web3.eth.net.getId();
-            const PostingdeployedNetwork = Posting.networks[networkId];
-            const UserdeployedNetwork = User.networks[networkId];
-            const instance = new web3.eth.Contract(
-                Posting.abi,
-                PostingdeployedNetwork && PostingdeployedNetwork.address,
-            );
-            const instance1 = new web3.eth.Contract(
-                User.abi,
-                UserdeployedNetwork && UserdeployedNetwork.address,
-            );
-            this.setState({ web3, accounts, posting: instance, user: instance1 });
-                } catch (error) {
-            alert(
-                `Failed to load web3, accounts, or contract. Check console for details.`,
-            );
-            console.error(error);
-        }
+    UNSAFE_componentWillMount = async () => {
         var like = await this.state.posting.methods.getWhetherUserLike(this.state.post_id).call()
         
         if(like){
