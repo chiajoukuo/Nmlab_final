@@ -104,6 +104,12 @@ contract TestPosting{
         Assert.equal(1, arr[0], "First post ID");
         Assert.equal(2, arr[1], "Second post ID");
         Assert.equal(3, arr[2], "Third post ID");
+        uint[] memory arrr = posting.getPostsByAddr(address(this));
+        Assert.equal(1, arrr[0], "First post ID");
+        Assert.equal(2, arrr[1], "Second post ID");
+        Assert.equal(3, arrr[2], "Third post ID");
+        uint[] memory arrrr = posting.getPostsByAddr(address(msg.sender));
+        Assert.equal(0, arrrr.length, "Length should equal to zero");
     }
 
 

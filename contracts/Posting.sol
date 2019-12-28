@@ -64,6 +64,24 @@ contract Posting {
     return allPost;
   }
 
+  function getPostsByAddr(address _author) public view returns(uint[] memory){
+    uint count = 0;
+    for (uint i = 0;i<posts.length; i++){
+      if (bytes(posts[i].pic).length>0 && posts[i].authorID == _author){
+        count++;
+      }
+    }
+    uint[] memory returnPosts = new uint[](count);
+    uint index = 0;
+    for (uint i = 0;i<posts.length; i++){
+      if (bytes(posts[i].pic).length>0 && posts[i].authorID == _author){
+        returnPosts[index] = i;
+        index++;
+      }
+    }
+    return returnPosts;
+  }
+
   function getPostByHashtag(string memory _hashtag)public view returns(uint[] memory) {
     uint postLength = posts.length;
     bool[] memory logArr = new bool[](postLength);
