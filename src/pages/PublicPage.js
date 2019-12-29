@@ -12,9 +12,19 @@ class PublicPage extends React.Component {
         avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s'
       };
     }
-  
+    UNSAFE_componentWillMount = async () => {
+      var user = await this.props.user.methods.getAuthorByAddr(this.props.match.params.id).call()
+      var posts = await this.props.posting.methods.getPostsByAddr(this.props.match.params.id).call()
+      console.log(posts)
+      
+      this.setState({
+        userName : user[2],
+        avatar:user[1],
+      })
+    };  
   
     render() {
+      // console.log(this.props.match.params.id)
       return (
         <div>
             <div className='between'></div>

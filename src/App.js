@@ -70,7 +70,7 @@ class App extends React.Component {
                 <Route exact path='/upload' render={(props) => <UploadPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
 
                 <Route exact path='/profile' render={(props) => <PrivatePage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
-                <Route exact path='/public_profile/:id?' component={PublicPage}></Route>
+                <Route exact path='/public_profile/:id?' render={(props) => <PublicPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/new_post' component={NewPostPage}></Route>
               </Switch>
             </div>

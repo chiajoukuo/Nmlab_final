@@ -13,34 +13,7 @@ class PrivatePage extends React.Component {
     };
   }
   UNSAFE_componentWillMount = async () => {
-    // try {
-    //     const web3 = this.props.web3
-    //     const accounts = await web3.eth.getAccounts();
-    //     const networkId = await web3.eth.net.getId();
-    //     const PostingdeployedNetwork = Posting.networks[networkId];
-    //     const UserdeployedNetwork = User.networks[networkId];
-    //     const instance = new web3.eth.Contract(
-    //         Posting.abi,
-    //         PostingdeployedNetwork && PostingdeployedNetwork.address,
-    //     );
-    //     const instance1 = new web3.eth.Contract(
-    //         User.abi,
-    //         UserdeployedNetwork && UserdeployedNetwork.address,
-    //     );
-    //     this.setState({ 
-    //         web3, accounts, 
-    //         posting: instance, 
-    //         user: instance1
-    //     });
-
-    // } catch (error) {
-    //     alert(
-    //         `Failed to load web3, accounts, or contract. Check console for details.`,
-    //     );
-    //     console.error(error);
-    // }
     var user = await await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
-    console.log(user)
     this.setState({
       userName : user[2],
       avatar:user[1],
