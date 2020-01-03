@@ -19,11 +19,19 @@ contract Posting {
     post Basic Part
   *******************/
   function createPost(string memory _postInfo, string memory _pic) public returns (uint) {
+    for (uint i = 0;i<posts.length;i++){
+      if (keccak256(bytes(posts[i].pic)) == keccak256(bytes(_pic))){
+        emit CreatePost(false, 0);
+        return 0;
+      }
+    }
     Post memory myPost;
     myPost.pic = _pic;
     myPost.authorID = msg.sender;
     myPost.postInfo = _postInfo;
-    return (posts.push(myPost));
+    uint id = posts.push(myPost);
+    emit CreatePost(true, id);
+    return id;
   }
 
   function deletePost(uint _postID) public validPostID(_postID) {
@@ -172,7 +180,18 @@ contract Posting {
     return posts[_postID].userNum;
   }
 
+  /******************
+    Post Event Part
+   ******************/
 
+  event CreatePost(
+    bool success,
+    uint id
+  );
+
+  event PayForUser(
+    bool donate
+  );
 
   /******************
    Post Utility Part
@@ -284,8 +303,13 @@ contract Posting {
     // Possibly need to check max gasprice and usedGas here to limit possibility for abuse.
     uint gasCost = usedGas * tx.gasprice;
     // Refund gas cost
-    if (address(this).balance > gasCost)
+    if (address(this).balance > gasCost){
+      emit PayForUser(true);
       msg.sender.transfer(gasCost);
+    }
+    else{
+      emit PayForUser(false);
+    }
   }
 
   /******************

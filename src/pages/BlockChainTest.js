@@ -87,7 +87,19 @@ class BlockChainTest extends React.Component {
 
   
   handlePost = async (event) =>{
-    await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
+
+    var event = this.state.posting.events.CreatePost(function(error, result){
+      if (!error) {
+        //console.log(result.returnValues.success);
+        if (result.returnValues.success === false){
+          alert(
+            `Picture duplication!`,
+          );
+        }
+      }
+    });
+    await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "1232196239696916969690696969696969696969696").send({ from: this.state.accounts[0]});
+    this.setState({balance: await this.state.posting.methods.getPostNum().call()});
   }
 
   handleDonate = async (event) =>{
@@ -97,7 +109,17 @@ class BlockChainTest extends React.Component {
   }
 
   handleLike = async (event) =>{
-    await this.state.posting.methods.toggleLikes(0, 0).send({ from: this.state.accounts[0]});
+    var event = this.state.posting.events.PayForUser(function(error, result){
+      if (!error) {
+        //console.log(result.returnValues.donate);
+        if (result.returnValues.donate === true){
+          alert(
+            `Free click`,
+          );
+        }
+      }
+    });
+    await this.state.posting.methods.toggleLikes(0).send({ from: this.state.accounts[0]});
     this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
