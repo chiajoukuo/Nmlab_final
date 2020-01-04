@@ -11,6 +11,9 @@ const ipfs = ipfsAPI({
   protocol: 'http'
 });
 
+const deepai = require('deepai'); 
+deepai.setApiKey('quickstart-QUdJIGlzIGNvbWluZy4uLi4K');
+
 let saveImageToIPFS = (reader) => {
   return new Promise(function(resolve, reject) {
       const buffer = Buffer.from(reader.result);
@@ -32,6 +35,8 @@ class BlockChainTest extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    this.handleSimilarity = this.handleSimilarity.bind(this);
+    this.handleCreateAuthor = this.handleCreateAuthor.bind(this);
     this.state = {texting: 'Hello world', balance: 0, imageHash: null};
   }
 
@@ -123,6 +128,16 @@ class BlockChainTest extends React.Component {
     this.setState({balance: await this.state.posting.methods.getBalance().call()});
   }
 
+  handleSimilarity = async (event) =>{
+    console.log("Cool");
+    var resp = await deepai.callStandardApi("image-similarity", {
+      image1: "https://f.ecimg.tw/items/DEAS7YA90096SAM/i010001_1530774133.png",
+      image2: "https://f.ecimg.tw/items/DEAS7YA90096SAM/i010001_1530774133.png",
+    });
+    console.log(resp);
+    this.setState({balance: resp.output.distance});
+  }
+
   handleCreateAuthor = async (event) =>{
     
     // var arr1 = new Array();
@@ -132,6 +147,8 @@ class BlockChainTest extends React.Component {
 
     await this.state.user.methods.createAuthor(this.state.accounts[0], "haha", "cool",arr1, arr2).send({ from: this.state.accounts[0]});
   }
+
+  
 
   handleUpload = async (event) =>{
     console.log(this.state.accounts[0]);
@@ -160,9 +177,11 @@ class BlockChainTest extends React.Component {
         <button onClick={this.handleDonate}>Donate 1 Ether!</button>
         <button onClick={this.handlePost}>CreatePost!</button>
         <button onClick={this.handleAddUser}>AddUser!</button>
+        <button onClick={this.handleSimilarity}>testSimilarity!</button>
         <h2>{this.state.balance}</h2>
         <button onClick={this.handleLike}>CLickLike!</button>
         <button onClick={this.handleCreateAuthor}>CreateAuthor</button>
+
 
         <div style={{marginTop:10}}>上传图片到IPFS：</div>
         <div>
