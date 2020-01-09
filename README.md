@@ -10,6 +10,7 @@ $ npm install
 Replace line 44 in ./node_modules/react-dev-utils/ModuleScopePlugin.js with "return true" to enable js file access to outside of /src
 open ganache GUI
 $ ganache-cli -p 8545
+$ ipfs daemon //initiate IPFS
 open another terminal and run 
 $ truffle compile
 $ truffle migrate
