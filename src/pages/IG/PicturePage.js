@@ -65,9 +65,7 @@ class PicturePage extends Component{
             likeNum:post[3],
             msgNum:post[5],
             pic:post[6]
-
         })
-
     }
 
     render(){
@@ -77,12 +75,13 @@ class PicturePage extends Component{
                     <div className='between'></div>
                         <article className="picture_Post" >
                             <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author_name} web3={this.props.web3} pic={this.state.author_pic} />
-                            <PostImage pic = {this.state.pic}/>
+                            <PostImage pic = {this.state.pic} />
                             <PostButton 
                                 like = {this.state.like} 
                                 likeNum = {this.state.likeNum} 
                                 msgNum = {this.state.msgNum} 
                                 userNum = {this.state.userNum} 
+                                photo = {this.state.pic}
                                 postID = {this.state.postID} 
                                 web3={this.props.web3}
                                 posting={this.state.posting} 

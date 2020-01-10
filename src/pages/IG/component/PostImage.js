@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import './IG_style.css';
-import {Link } from "react-router-dom";
+// import {Link } from "react-router-dom";
 
 
 class PostImage extends Component{
@@ -12,7 +12,7 @@ class PostImage extends Component{
     }
 
     render(){
-        var link = '/posts/'+this.props.postID
+        //var link = '/posts/'+this.props.postID
         //console.log('link:',link)
         
         // console.log(this.props)
@@ -20,13 +20,13 @@ class PostImage extends Component{
         // console.log(this.props.pic)
 
         return(
-            <Link to={link}>
+            // <Link to={link}>
                 <div className="Post-image">
                     <div className="Post-image-bg">
-                        <img alt="Icon Living" src={this.state.src} />
+                        <img alt="post" src={this.state.src} />
                     </div>
                 </div>
-            </Link>
+            //</Link>
         );
     }
     

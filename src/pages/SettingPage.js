@@ -153,7 +153,7 @@ class SettingPage extends Component{
                     </div>
                     <div className='setting_line'>
                         <Button size="sm" onClick={this.save_setting} style={{ marginBottom: "5px"}} >
-                        Upload
+                        Save
                         </Button>
                     </div>
                     

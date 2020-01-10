@@ -6,6 +6,7 @@ import {
     ModalBody
 } from 'reactstrap';
 import './IG_style.css';
+import PostImage from './PostImage';
 
 class PostButton extends Component{
     
@@ -35,7 +36,7 @@ class PostButton extends Component{
     }
     UNSAFE_componentWillMount = async () => {
         var like = await this.state.posting.methods.getWhetherUserLike(this.state.post_id).call()
-        
+        console.log(this.state.accounts, this.state.post_id,like)
         if(like){
             this.setState({
                 src:this.src[1],
@@ -63,13 +64,17 @@ class PostButton extends Component{
         })
         const postid = this.state.post_id;
         await this.state.posting.methods.toggleLikes(postid).send({ from: this.state.accounts[0]});
-        console.log(await this.state.posting.methods.getLikeNumByID(0).call())
+        //console.log(await this.state.posting.methods.getLikeNumByID(0).call())
     }
     toggle = () => {
         this.setState({
             modal: !this.state.modal
         });
         //console.log('toggle')
+    }
+    purchase=()=>{
+        console.log("purchase")
+        this.toggle()
     }
     render(){
         return(
@@ -85,18 +90,19 @@ class PostButton extends Component{
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader onClick={this.toggle}>Purchase this image.</ModalHeader>
                     <ModalBody>
-                        purchase information
+                        {/* purchase information */}
+                        <img src={this.props.photo} alt='purchase photo' />
                         <div>
                             NT$ 0.01
                         </div>
-                        <Button size="sm" onClick={this.upload_post} style={{ marginBottom: "5px", marginTop:"10px"}} >
+                        <Button size="sm" onClick={this.toggle} style={{ marginBottom: "5px", marginTop:"10px"}} >
                             cancel
                             {/* <CloudUploadIcon
                             size="small"
                             style={{ marginLeft: "5px" }}
                             /> */}
                         </Button>
-                        <Button size="sm" onClick={this.upload_post} style={{ marginBottom: "5px", marginLeft: "5px",marginTop:"10px"}} >
+                        <Button color="info" size="sm" onClick={this.purchase} style={{ marginBottom: "5px", marginLeft: "5px",marginTop:"10px"}} >
                             purchase
                             {/* <CloudUploadIcon
                             size="small"

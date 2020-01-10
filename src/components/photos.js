@@ -43,7 +43,7 @@ const images_src = [
 //         // {src: 'https://i.pinimg.com/originals/b1/b1/28/b1b1288ef2d24d49bf592098732695ab.png', text: 'image 13'}        
 //         ]
 
-class HomePage extends Component{
+class Photos extends Component{
     // constructor(props){
     //     super(props);
     //     this.state = {
@@ -68,7 +68,7 @@ class HomePage extends Component{
         return(
             <StackGrid
                 monitorImagesLoaded
-                columnWidth={300}
+                columnWidth={80}
                 duration={600}
                 gutterWidth={15}
                 gutterHeight={15}
@@ -97,4 +97,4 @@ class HomePage extends Component{
     }
 }
 
-export default HomePage;
+export default Photos;

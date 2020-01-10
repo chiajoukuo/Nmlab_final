@@ -206,7 +206,7 @@ class BlockChainTest extends React.Component {
             
            }}>开始上传</button>
            <div>{"http://localhost:8080/ipfs/" + this.state.imageHash}</div>
-           <img alt="" style={{width: 100, height: 100 }} src={"http://localhost:8080/ipfs/" + this.state.imageHash}/>
+           <img alt="" style={{height: 100 }} src={"http://localhost:8080/ipfs/" + this.state.imageHash}/>
            <div> "cool"</div>
       </div>
     );

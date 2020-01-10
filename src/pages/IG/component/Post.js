@@ -3,6 +3,7 @@ import PostHead from './PostHead';
 import PostImage from './PostImage';
 import PostContent from './PostContent';
 import PostButton from './PostButton';
+import {Link } from "react-router-dom";
 import './IG_style.css';
 
 class Post extends Component{
@@ -27,7 +28,10 @@ class Post extends Component{
             <article className="Post" ref="Post">
                 {/* <Route exact path='/test' component={PicturePage}></Route> */}
                 <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author} pic={this.state.author_pic}/>
-                <PostImage pic = {this.state.pic} postID = {this.state.post_id}/>
+                <Link to={'/posts/'+this.state.post_id}>
+                    <PostImage pic = {this.state.pic} />
+                </Link>
+                
                 <PostButton 
                     like = {this.state.like} 
                     likeNum = {this.state.likeNum} 
@@ -37,7 +41,8 @@ class Post extends Component{
                     web3={this.props.web3}
                     posting={this.props.posting} 
                     user={this.props.user} 
-                    accounts={this.props.accounts}/>
+                    accounts={this.props.accounts}
+                    photo = {this.state.pic}/>
                 <PostContent content = {this.state.postInfo}/>
             </article>
         );

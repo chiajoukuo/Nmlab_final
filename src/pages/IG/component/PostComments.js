@@ -50,12 +50,14 @@ class PostComments extends Component{
         }
         var my = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
         var my_name = my[2]
+        var my_pic = my[1]
         //msgs.push({msg:'msg_tmp',author:'auth',authorID:'0'})
         //ids.push(0)
         this.setState({
             //comments_id:ids,
             comments:msgs,
             name:my_name,
+            photo:my_pic,
         })
 
     }
@@ -83,14 +85,14 @@ class PostComments extends Component{
         }
     }
     render(){
-        console.log(this.state.comments)
+        //console.log(this.state.comments)
         if(this.state.msgNum>0){
             return(
                 <div className='post_comments'>
                     {this.state.comments.map(
                         item=>(
                             <React.Fragment key={item.idx}>
-                                <PostComment  text={item.msg} author={item.author} authorID={item.authorID} author_pic={this.state.photo}/>
+                                <PostComment  text={item.msg} author={item.author} authorID={item.authorID} author_pic={item.author_pic}/>
                             </React.Fragment>
                         )
                     )}
