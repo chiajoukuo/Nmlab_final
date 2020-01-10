@@ -6,6 +6,7 @@ contract Posting {
     address payable authorID;
     string pic;
     uint userNum;
+    address[] users;
     address[] whoLike;
     string postInfo;
     string[] msgs;
@@ -157,9 +158,9 @@ contract Posting {
     return posts[_postID].whoLike.length;
   }
 
-  function getWhetherUserLike(uint _postID) public view validPostID(_postID) returns(bool){
+  function getWhetherUserLike(uint _postID, address author) public view validPostID(_postID) returns(bool){
     for (uint i = 0; i < posts[_postID].whoLike.length;i++){
-      if (posts[_postID].whoLike[i] == msg.sender) {
+      if (posts[_postID].whoLike[i] == author) {
         return true;
       }
     }
@@ -173,11 +174,39 @@ contract Posting {
     require(msg.value>price, "Not enough msg value");
     uint transferMoney = msg.value - price;
     posts[_postID].authorID.transfer(transferMoney);
-    posts[_postID].userNum++;
+    posts[_postID].users.push(msg.sender);
   }
 
   function getPostUserNum(uint _postID) public view validPostID(_postID) returns(uint) {
-    return posts[_postID].userNum;
+    return posts[_postID].users.length;
+  }
+
+  function getUserbyAddr(address author) public view returns(uint[] memory) {
+    uint count = 0;
+    for (uint i = 0;i<posts.length; i++){
+      if (bytes(posts[i].pic).length>0){
+        for(uint j = 0;j<posts[i].users.length;j++){
+          if(posts[i].users[j] == author){
+            count++;
+            break;
+          }
+        }
+      }
+    }
+    uint[] memory returnPosts = new uint[](count);
+    uint index = 0;
+    for (uint i = 0;i<posts.length; i++){
+      if (bytes(posts[i].pic).length>0){
+        for(uint j = 0;j<posts[i].users.length;j++){
+          if(posts[i].users[j] == author){
+            returnPosts[index] = i;
+            index++;
+            break;
+          }
+        }
+      }
+    }
+    return returnPosts;
   }
 
   /******************

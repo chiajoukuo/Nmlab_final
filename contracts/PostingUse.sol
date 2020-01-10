@@ -149,9 +149,9 @@ contract PostingUse {
     return usePosts[_postID].whoLike.length;
   }
 
-  function getUseWhetherUserLike(uint _postID) public view validUsePostID(_postID) returns(bool){
+  function getUseWhetherUserLike(uint _postID, address author) public view validUsePostID(_postID) returns(bool){
     for (uint i = 0; i < usePosts[_postID].whoLike.length;i++){
-      if (usePosts[_postID].whoLike[i] == msg.sender) {
+      if (usePosts[_postID].whoLike[i] == author) {
         return true;
       }
     }

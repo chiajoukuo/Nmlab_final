@@ -88,12 +88,13 @@ class BlockChainTest extends React.Component {
   handleAddUser = async(event) =>{
     await this.state.posting.methods.addUser(0).send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
     this.setState({balance: await this.state.posting.methods.getBalance().call()});
+    console.log(await this.state.posting.methods.getUserbyAddr(this.state.accounts[0]).call());
   }
 
   
   handlePost = async (event) =>{
 
-    var event = this.state.posting.events.CreatePost(function(error, result){
+    var evvent = this.state.posting.events.CreatePost(function(error, result){
       if (!error) {
         //console.log(result.returnValues.success);
         if (result.returnValues.success === false){
@@ -103,7 +104,7 @@ class BlockChainTest extends React.Component {
         }
       }
     });
-    await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "1232196239696916969690696969696969696969696").send({ from: this.state.accounts[0]});
+    await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "12321962396969169690696969696969696969696").send({ from: this.state.accounts[0]});
     this.setState({balance: await this.state.posting.methods.getPostNum().call()});
   }
 
@@ -114,7 +115,7 @@ class BlockChainTest extends React.Component {
   }
 
   handleLike = async (event) =>{
-    var event = this.state.posting.events.PayForUser(function(error, result){
+    var evvvent = this.state.posting.events.PayForUser(function(error, result){
       if (!error) {
         //console.log(result.returnValues.donate);
         if (result.returnValues.donate === true){

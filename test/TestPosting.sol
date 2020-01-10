@@ -62,9 +62,9 @@ contract TestPosting{
     function testLIkeOperation() public{
         Posting posting = Posting(DeployedAddresses.Posting());
         Assert.equal(posting.toggleLikes(0), 1, "LikeNum should be 1 after click");
-        Assert.equal(posting.getWhetherUserLike(0), true, "Not like");
+        Assert.equal(posting.getWhetherUserLike(0, address(this)), true, "Not like");
         Assert.equal(posting.toggleLikes(0), 0, "LikeNum should be 0 after another click");
-        Assert.equal(posting.getWhetherUserLike(0), false, "Not like");
+        Assert.equal(posting.getWhetherUserLike(0, address(this)), false, "Not like");
         Assert.equal(posting.toggleLikes(0), 1, "LikeNum should be 1 after click");
         Assert.equal(posting.getLikeNumByID(0),1, "LikeNUm should be 1");
     }
