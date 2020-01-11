@@ -71,8 +71,8 @@ class PostComments extends Component{
             //console.log(this.state.comments)
             //var comments_id = [...this.state.comments_id, this.state.comments_id.length]
             const comments = [...this.state.comments, {idx:this.state.comments.length,msg:this.state.text,author:this.state.name,authorID:this.state.accounts[0],author_pic:this.state.photo}]
-            console.log('comments state',this.state.comments)
-            console.log('commments',comments)
+            //console.log('comments state',this.state.comments)
+            //console.log('commments',comments)
             await this.state.posting.methods.addMessage(this.props.postID,this.state.text).send({ from: this.state.accounts[0]});
             this.setState({
                 //comments_id:comments_id,
@@ -81,7 +81,8 @@ class PostComments extends Component{
                 msgNum:this.state.msgNum+1
 
             })
-            console.log(this.state.msgNum)
+            this.props.com();
+            //console.log(this.state.msgNum)
         }
     }
     render(){

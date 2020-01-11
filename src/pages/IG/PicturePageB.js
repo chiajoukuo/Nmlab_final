@@ -24,6 +24,7 @@ class PicturePageB extends Component{
             // msgNum:post[5],
             // pic:post[6]
         }
+        this.com = this.com.bind(this)
     }
     UNSAFE_componentWillMount = async () =>  {
         // try {
@@ -67,7 +68,13 @@ class PicturePageB extends Component{
             pic:post[5]
         })
     }
-
+    com(){
+        
+        var num = parseInt(this.state.msgNum,10)
+        this.setState({
+            msgNum:num+1
+        })
+    }
     render(){
         if(this.state.pic){
             return(
@@ -95,7 +102,8 @@ class PicturePageB extends Component{
                                 web3={this.props.web3}
                                 posting={this.props.posting} 
                                 user={this.props.user} 
-                                accounts={this.props.accounts}/>
+                                accounts={this.props.accounts}
+                                com={this.com}/>
                         </article>
                     <div className='between'></div>
                 </div>

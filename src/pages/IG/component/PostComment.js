@@ -17,7 +17,7 @@ class PostComment extends Component{
         };
     }
     render(){
-        console.log(this.props.author_pic)
+        //console.log(this.props.author_pic)
         return(
             <div className='post_comment'>
                 {/* <div>{this.props.comment_id} comment</div> */}

@@ -17,13 +17,16 @@ class PicturePage extends Component{
             // postID:post_id,
             // authorAddr : post[0],
             // author : "author_",
-            // userNum : post[1],
+            userNum : 0,
             // postInfo : post[2],
             // like:like,
             // likeNum:post[3],
-            // msgNum:post[5],
+            msgNum:0,
             // pic:post[6]
         }
+        this.com = this.com.bind(this)
+        this.pur = this.pur.bind(this)
+
     }
     UNSAFE_componentWillMount = async () =>  {
         // try {
@@ -67,6 +70,19 @@ class PicturePage extends Component{
             pic:post[6]
         })
     }
+    com(){
+        
+        var num = parseInt(this.state.msgNum,10)
+        this.setState({
+            msgNum:num+1
+        })
+    }
+    pur(){
+        var num = parseInt(this.state.userNum,10)
+        this.setState({
+            userNum:num+1
+        })
+    }
 
     render(){
         if(this.state.pic){
@@ -86,7 +102,8 @@ class PicturePage extends Component{
                                 web3={this.props.web3}
                                 posting={this.state.posting} 
                                 user={this.state.user} 
-                                accounts={this.state.accounts}/>
+                                accounts={this.state.accounts}
+                                pur={this.pur}/>
                             <PostContent content = {this.state.postInfo}/>
                             <PostComments 
                                 msgNum = {this.state.msgNum} 
@@ -95,7 +112,8 @@ class PicturePage extends Component{
                                 web3={this.props.web3}
                                 posting={this.props.posting} 
                                 user={this.props.user} 
-                                accounts={this.props.accounts}/>
+                                accounts={this.props.accounts}
+                                com={this.com}/>
                         </article>
                     <div className='between'></div>
                 </div>

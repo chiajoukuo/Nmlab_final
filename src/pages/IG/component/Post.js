@@ -22,6 +22,21 @@ class Post extends Component{
             pic : this.props.pic,
             b:this.props.b
         };
+        this.com = this.com.bind(this)
+        this.pur = this.pur.bind(this)
+    }
+    com(){
+        
+        var num = parseInt(this.state.msgNum,10)
+        this.setState({
+            msgNum:num+1
+        })
+    }
+    pur(){
+        var num = parseInt(this.state.userNum,10)
+        this.setState({
+            userNum:num+1
+        })
     }
     render(){
         //console.log(this.state.like)
@@ -44,7 +59,8 @@ class Post extends Component{
                     posting={this.props.posting} 
                     user={this.props.user} 
                     accounts={this.props.accounts}
-                    photo = {this.state.pic}/>
+                    photo = {this.state.pic}
+                    pur={this.pur}/>
                 <PostContent content = {this.state.postInfo}/>
             </article>
         );

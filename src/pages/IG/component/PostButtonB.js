@@ -79,7 +79,7 @@ class PostButtonB extends Component{
                     <img className='like_button' onClick={this.click_like} src={this.state.src} alt='like_button'/>
                     <span className='like_num'>{this.state.like_num}</span>
                     <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg'alt='message_button'/>
-                    <span className='like_num'>{this.state.message_num}</span>
+                    <span className='like_num'>{this.props.msgNum}</span>
                     {/* <img onClick={this.toggle} className='purchase_button' src='https://image.flaticon.com/icons/svg/1170/1170678.svg' alt='purchase'/>
                     <span className='like_num'>{this.state.bought_num}</span> */}
                 </div>
