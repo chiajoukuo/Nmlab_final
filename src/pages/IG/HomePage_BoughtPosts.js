@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import Post from './component/Post';
+import PostB from './component/Post_b';
 import './component/IG_style.css'
 
 class HomePageIG extends Component{
@@ -8,7 +8,7 @@ class HomePageIG extends Component{
         this.state = {
             web3:this.props.web3,
             accounts:this.props.accounts,
-            posting:this.props.posting,
+            posting:this.props.pu,
             user:this.props.user,
 
             posts_id : [],
@@ -19,7 +19,7 @@ class HomePageIG extends Component{
     }
 
     UNSAFE_componentWillMount = async () => {
-        var num = await this.state.posting.methods.getPostNum().call();
+        var num = await this.state.posting.methods.getUsePostNum().call();
         var i;
         var posts_id = []
         var posts_tmp = []
@@ -27,8 +27,8 @@ class HomePageIG extends Component{
         var authors = []
         var b = []
         for (i = 0; i < num; i++) {
-            var post_tmp = await this.state.posting.methods.getPostByID(i).call()
-            var like = await this.state.posting.methods.getWhetherUserLike(i,this.state.accounts[0]).call()
+            var post_tmp = await this.state.posting.methods.getUsePostByID(i).call()
+            var like = await this.state.posting.methods.getUseWhetherUserLike(i,this.state.accounts[0]).call()
             var author = await this.state.user.methods.getAuthorByAddr(post_tmp[0]).call()
             
             //post_tmp.push(like)
@@ -56,7 +56,6 @@ class HomePageIG extends Component{
     };
 
     render(){
-        console.log(this.state.posts)
         return(
             <>
                 <div className='homepage_ig'>
@@ -66,19 +65,19 @@ class HomePageIG extends Component{
                                 return(
                                     <React.Fragment key={post_id_element}>
                                         <div className='between'></div>
-                                        <Post 
+                                        <PostB
                                             post_id={post_id_element}
                                             authorID = {this.state.posts[post_id_element][0]}
                                             author = {this.state.authors[post_id_element][2]}
                                             author_pic = {this.state.authors[post_id_element][1]}
-                                            userNum = {this.state.posts[post_id_element][1]}
-                                            postInfo = {this.state.posts[post_id_element][2]}
+                                            //userNum = {this.state.posts[post_id_element][1]}
+                                            postInfo = {this.state.posts[post_id_element][1]}
                                             like = {this.state.likes[post_id_element]}
-                                            likeNum = {this.state.posts[post_id_element][3]}
-                                            msgNum = {this.state.posts[post_id_element][5]} 
-                                            pic = {this.state.posts[post_id_element][6]}
+                                            likeNum = {this.state.posts[post_id_element][2]}
+                                            msgNum = {this.state.posts[post_id_element][4]} 
+                                            pic = {this.state.posts[post_id_element][5]}
                                             web3 = {this.props.web3}
-                                            posting={this.props.posting}
+                                            pu={this.props.pu}
                                             user={this.props.user} 
                                             accounts={this.props.accounts}
                                         />

@@ -8,7 +8,7 @@ import {
 import './IG_style.css';
 import PostImage from './PostImage';
 
-class PostButton extends Component{
+class PostButtonB extends Component{
     
     constructor(props) {
         super(props);
@@ -35,7 +35,7 @@ class PostButton extends Component{
        
     }
     UNSAFE_componentWillMount = async () => {
-        var like = await this.state.posting.methods.getWhetherUserLike(this.state.post_id,this.state.accounts[0]).call()
+        var like = await this.state.posting.methods.getUseWhetherUserLike(this.state.post_id,this.state.accounts[0]).call()
         //console.log(this.state.accounts, this.state.post_id,like)
         if(like){
             this.setState({
@@ -63,7 +63,7 @@ class PostButton extends Component{
             src:src_status
         })
         const postid = this.state.post_id;
-        await this.state.posting.methods.toggleLikes(postid).send({ from: this.state.accounts[0]});
+        await this.state.posting.methods.toggleUseLikes(postid).send({ from: this.state.accounts[0]});
         //console.log(await this.state.posting.methods.getLikeNumByID(0).call())
     }
     toggle = () => {
@@ -71,10 +71,6 @@ class PostButton extends Component{
             modal: !this.state.modal
         });
         //console.log('toggle')
-    }
-    purchase = async() =>{
-        await this.state.posting.methods.addUser(this.state.post_id).send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
-        this.toggle()
     }
     render(){
         return(
@@ -84,39 +80,13 @@ class PostButton extends Component{
                     <span className='like_num'>{this.state.like_num}</span>
                     <img className='message_button' src='https://image.flaticon.com/icons/svg/1380/1380338.svg'alt='message_button'/>
                     <span className='like_num'>{this.state.message_num}</span>
-                    <img onClick={this.toggle} className='purchase_button' src='https://image.flaticon.com/icons/svg/1170/1170678.svg' alt='purchase'/>
-                    <span className='like_num'>{this.state.bought_num}</span>
+                    {/* <img onClick={this.toggle} className='purchase_button' src='https://image.flaticon.com/icons/svg/1170/1170678.svg' alt='purchase'/>
+                    <span className='like_num'>{this.state.bought_num}</span> */}
                 </div>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader onClick={this.toggle}>Purchase this image.</ModalHeader>
-                    <ModalBody>
-                        {/* purchase information */}
-                        {/* <img src={this.props.photo} alt='purchase photo' /> */}
-                        <PostImage pic = {this.props.photo} />
-                        <div>
-                            NT$ 0.01
-                        </div>
-                        <Button size="sm" onClick={this.toggle} style={{ marginBottom: "5px", marginTop:"10px"}} >
-                            cancel
-                            {/* <CloudUploadIcon
-                            size="small"
-                            style={{ marginLeft: "5px" }}
-                            /> */}
-                        </Button>
-                        <Button color="info" size="sm" onClick={this.purchase} style={{ marginBottom: "5px", marginLeft: "5px",marginTop:"10px"}} >
-                            purchase
-                            {/* <CloudUploadIcon
-                            size="small"
-                            style={{ marginLeft: "5px" }}
-                            /> */}
-                        </Button>
-                        
-                    </ModalBody>
-                </Modal>
             </>
         );
     }
     
 }
 
-export default PostButton;
+export default PostButtonB;

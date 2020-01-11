@@ -2,11 +2,11 @@ import React,{Component} from 'react';
 import PostHead from './PostHead';
 import PostImage from './PostImage';
 import PostContent from './PostContent';
-import PostButton from './PostButton';
+import PostButtonB from './PostButtonB';
 import {Link } from "react-router-dom";
 import './IG_style.css';
 
-class Post extends Component{
+class PostB extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -30,18 +30,17 @@ class Post extends Component{
             <article className="Post" ref="Post">
                 {/* <Route exact path='/test' component={PicturePage}></Route> */}
                 <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author} pic={this.state.author_pic}/>
-                <Link to={'/posts/'+this.state.post_id}>
+                <Link to={'/bought_posts/'+this.state.post_id}>
                     <PostImage pic = {this.state.pic} />
                 </Link>
                 
-                <PostButton 
+                <PostButtonB
                     like = {this.state.like} 
                     likeNum = {this.state.likeNum} 
                     msgNum = {this.state.msgNum} 
-                    userNum = {this.state.userNum} 
                     postID = {this.state.post_id} 
                     web3={this.props.web3}
-                    posting={this.props.posting} 
+                    posting={this.props.pu} 
                     user={this.props.user} 
                     accounts={this.props.accounts}
                     photo = {this.state.pic}/>
@@ -52,4 +51,4 @@ class Post extends Component{
     
 }
 
-export default Post;
+export default PostB;

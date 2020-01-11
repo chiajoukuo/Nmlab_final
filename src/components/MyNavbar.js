@@ -48,7 +48,8 @@ class MyNavbar extends Component {
         <div className='navbar_div'>
           <Navbar color="dark" dark expand="sm"  >
             <Container>
-              <NavbarBrand href='/home'>Home</NavbarBrand>
+              <NavbarBrand href='/home'>Gallery</NavbarBrand>
+              <NavbarBrand href='/bought_posts'>Posts</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
               <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="mr-auto" navbar>

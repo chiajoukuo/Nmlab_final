@@ -13,23 +13,44 @@ class PrivatePage extends React.Component {
     this.state = {
       userName: 'username',
       avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
-      photos: []
+      photos: [],
+      buys:[],
+      posts:[]
     };
   }
   UNSAFE_componentWillMount = async () => {
-    var user = await await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
-    var post_ids = await this.props.posting.methods.getPostsByAddr(this.props.accounts[0]).call()
+    var user = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
+    //----------upload---------
+    var upload_ids = await this.props.posting.methods.getPostsByAddr(this.props.accounts[0]).call()
     var photos = []
-    for(var idx=0; idx<post_ids.length; idx++){
-      var pid = post_ids[idx]
+    for(var idx=0; idx<upload_ids.length; idx++){
+      var pid = upload_ids[idx]
       var post = await this.props.posting.methods.getPostByID(pid).call()
-      //console.log(post[2])
       photos.push({src:post[6], text:post[2], post_id:pid})
     }
+    //----------buy---------
+    var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
+    var buys = []
+    for(var idx=0; idx<buy_ids.length; idx++){
+      var pid = buy_ids[idx]
+      var post = await this.props.posting.methods.getPostByID(pid).call()
+      buys.push({src:post[6], text:post[2], post_id:pid})
+    }
+    //----------post---------
+    var post_ids = await this.props.pu.methods.getUsePostsByAddr(this.props.accounts[0]).call()
+    var posts = []
+    for(var idx=0; idx<post_ids.length; idx++){
+      var pid = post_ids[idx]
+      var post = await this.props.pu.methods.getUsePostByID(pid).call()
+      posts.push({src:post[5], text:post[1], post_id:pid})
+    }
+
     this.setState({
       userName : user[2],
       avatar:user[1],
-      photos:photos
+      photos:photos,
+      posts:posts,
+      buys:buys
     })
   };  
   render() {
@@ -78,14 +99,61 @@ class PrivatePage extends React.Component {
 
           <h1 className='profile_author'>My posts</h1>
           <div className='between'></div>
-          <BoughtImages></BoughtImages>
+          <StackGrid
+              monitorImagesLoaded
+              columnWidth={300}
+              duration={600}
+              gutterWidth={15}
+              gutterHeight={15}
+              easing={easings.cubicOut}
+              appearDelay={60}
+              appear={transition.appear}
+              appeared={transition.appeared}
+              enter={transition.enter}
+              entered={transition.entered}
+              leaved={transition.leaved}
+          >
+              {this.state.posts.map(
+                  element => (
+                      <figure key={element.src} className="image">
+                          <Link to={"/bought_posts/"+element.post_id}>
+                              <img src={element.src} alt={element.text}/>  
+                          </Link>
+                      </figure>
+                  )
+              )}
+          </StackGrid>
           <div className='between'></div>
           <div className='between'></div>
           <div className='between'></div>
 
           <h1 className='profile_author'>images I bought</h1>
           <div className='between'></div>
-          <BoughtImages></BoughtImages>
+          <StackGrid
+              monitorImagesLoaded
+              columnWidth={300}
+              duration={600}
+              gutterWidth={15}
+              gutterHeight={15}
+              easing={easings.cubicOut}
+              appearDelay={60}
+              appear={transition.appear}
+              appeared={transition.appeared}
+              enter={transition.enter}
+              entered={transition.entered}
+              leaved={transition.leaved}
+          >
+              {this.state.buys.map(
+                  element => (
+                      <figure key={element.src} className="image">
+                          <Link to={"/posts/"+element.post_id}>
+                              <img src={element.src} alt={element.text}/>  
+                              {/* <figcaption>{element.text}</figcaption> */}
+                          </Link>
+                      </figure>
+                  )
+              )}
+          </StackGrid>
           <div className='between'></div>
       </div>
     );

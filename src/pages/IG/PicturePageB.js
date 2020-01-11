@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PostHead from './component/PostHead';
 import PostImage from './component/PostImage';
-import PostButton from './component/PostButton';
+import PostButtonB from './component/PostButtonB';
 import PostContent from './component/PostContent';
-import PostComments from './component/PostComments';
+import PostCommentsB from './component/PostCommentsB';
 import './component/IG_style.css';
 
-class PicturePage extends Component{
+class PicturePageB extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -49,22 +49,22 @@ class PicturePage extends Component{
         //     console.error(error);
         // }
         var post_id = this.props.match.params.id
-        var post = await this.state.posting.methods.getPostByID(post_id).call()
+        var post = await this.state.posting.methods.getUsePostByID(post_id).call()
         var author = await this.state.user.methods.getAuthorByAddr(post[0]).call()
         var author_name = author[2]
         var author_pic = author[1]
-        var like = await this.state.posting.methods.getWhetherUserLike(post_id,this.state.accounts[0]).call()
+        var like = await this.state.posting.methods.getUseWhetherUserLike(post_id,this.state.accounts[0]).call()
         this.setState({
             postID:post_id,//parseInt(post_id,10),
             authorAddr : post[0],
             author_name : author_name,
             author_pic : author_pic,
-            userNum : post[1],
-            postInfo : post[2],
+            //userNum : post[1],
+            postInfo : post[1],
             like:like,
-            likeNum:post[3],
-            msgNum:post[5],
-            pic:post[6]
+            likeNum:post[2],
+            msgNum:post[4],
+            pic:post[5]
         })
     }
 
@@ -76,7 +76,7 @@ class PicturePage extends Component{
                         <article className="picture_Post" >
                             <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author_name} web3={this.props.web3} pic={this.state.author_pic} />
                             <PostImage pic = {this.state.pic} />
-                            <PostButton 
+                            <PostButtonB
                                 like = {this.state.like} 
                                 likeNum = {this.state.likeNum} 
                                 msgNum = {this.state.msgNum} 
@@ -88,7 +88,7 @@ class PicturePage extends Component{
                                 user={this.state.user} 
                                 accounts={this.state.accounts}/>
                             <PostContent content = {this.state.postInfo}/>
-                            <PostComments 
+                            <PostCommentsB
                                 msgNum = {this.state.msgNum} 
                                 postID = {this.state.postID} 
                                 pic={this.state.author_pic}
@@ -109,4 +109,4 @@ class PicturePage extends Component{
     }
 }
 
-export default PicturePage;
+export default PicturePageB;

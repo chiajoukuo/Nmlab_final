@@ -1,10 +1,5 @@
 import React from 'react';
-// import PostHead from './IG/component/PostHead';
-// import PostImage from './IG/component/PostImage';
-// import PostButton from './IG/component/PostButton';
-// import PostContent from './IG/component/PostContent';
-// import PostComments from './IG/component/PostComments';
-import Photos from '../components/photos';
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import './IG/component/IG_style.css'
 import {
   Button,
@@ -13,6 +8,12 @@ import {
   ModalBody,
   Input
 } from "reactstrap";
+import StackGrid, { transitions, easings } from "react-stack-grid";
+import {Link } from "react-router-dom";
+import '../css/grid_style.css'
+import '../css/normalize.css'
+const transition = transitions.scaleDown;
+
 
 class NewPostPage extends React.Component {
     constructor(props) {
@@ -24,39 +25,62 @@ class NewPostPage extends React.Component {
         content:'',
         modal:false,
         value:0,
+        buys:[]
 
         // web3:this.props.web3,
         // accounts:this.props.accounts,
         // posting:this.props.posting,
         // user:this.props.user,
       };
+    } 
+    UNSAFE_componentWillMount = async () => {
+      var author = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
+      var author_name = author[2]
+      var author_photo = author[1]
+      //----------buy--------
+      this.setState({
+        photo:author_photo,
+        name:author_name
+      })
+      console.log(await this.props.pu.methods.getAllUsePost().call())
+    };
+    createPost = async() => {
+      console.log("upload")
+      await this.props.pu.methods.createUsePost(this.state.content,this.state.src).send({ from: this.props.accounts[0]})
     }
+    click_upload = async() =>{
+      var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
+      var buys = []
+      for(var idx=0; idx<buy_ids.length; idx++){
+        var pid = buy_ids[idx]
+        var post = await this.props.posting.methods.getPostByID(pid).call()
+        buys.push({src:post[6], text:post[2], post_id:pid})
+      }
+      this.setState({
+        buys:buys
+      })
+      this.toggle()
+
+    }
+    choose_img(src){
+      this.setState({
+        src:src
+      })
+      this.toggle()
+    }
+
     onChange = e => {
       this.setState({ [e.target.name]: e.target.value });
-    };
-    onSubmit = e => {
-      // e.preventDefault();
-      
-      if (this.state.url_input !== "") {
-          //console.log(this.state.url_input)
-          this.setState({
-              url:this.state.url_input,
-              url_input:''
-          })
-          this.toggle();
-      }
     };
     toggle = () => {
       this.setState({
           modal: !this.state.modal,
-          url_input:'',
           isUploading: false,
           isUploaded: false
       });
     };
   
     render() {
-      console.log(this.state)
       return (
         <>
             <div className='between'></div>
@@ -78,7 +102,7 @@ class NewPostPage extends React.Component {
                 {/* <ImageUploader /> */}
                 <div className="Post-image">
                   <div className="Post-image-bg">
-                      <img alt="Upload your own." src={this.state.src} onClick={this.toggle } className='uploader'/>
+                      <img alt="Upload your own." src={this.state.src} onClick={this.click_upload} className='uploader'/>
                   </div>
               </div>
                 <div className='post_buttons'>
@@ -92,48 +116,70 @@ class NewPostPage extends React.Component {
                 <div className='post_content'>
                   {/* <p>{this.state.content}</p> */}
                   <Input
-                      value={this.state.content}
-                      type="text"
-                      name="content"
-                      id="content"
-                      className="mb-3"
-                      placeholder="Write some discription here."
-                      onChange={this.onChange}
-                      required
+                    value={this.state.content}
+                    type="textarea"
+                    name="content"
+                    placeholder="Write some discription here."
+                    style={{ height: "100px" }}
+                    onChange={this.onChange}
+                    required
                   />
                 </div>
-                  {/* <PostHead/>
-                  <PostImage/>
-                  <PostButton/> 
-                  <PostContent/>*/}
+                <div>
+                <Button size="sm" onClick={this.createPost} style={{ marginBottom: "5px"}} >
+                  Upload
+                  <CloudUploadIcon
+                  size="small"
+                  style={{ marginLeft: "5px" }}
+                  />
+                </Button>
+              </div>
               </article>
-            </div>
-            {/* <div style={{display:'inline'}}>
-              <HomePage/> 
-            </div> */}
-            
+            </div>     
             <div className='between'></div>
-            
             <div className='foot'></div>
 
-
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader onClick={this.toggle}>
-                        Choose one image.
-                    </ModalHeader>
-                    <ModalBody>
-                        <Photos/>
+              <ModalHeader onClick={this.toggle}>
+                  Choose one image.
+              </ModalHeader>
+              <ModalBody>
+              <StackGrid
+                monitorImagesLoaded
+                columnWidth={80}
+                duration={600}
+                gutterWidth={15}
+                gutterHeight={15}
+                easing={easings.cubicOut}
+                appearDelay={60}
+                appear={transition.appear}
+                appeared={transition.appeared}
+                enter={transition.enter}
+                entered={transition.entered}
+                leaved={transition.leaved}
+                >
+                    {this.state.buys.map(
+                        element => (
+                            <figure key={element.src} className="image">
+                                {/* <Link to={"/posts/"+element.post_id}> */}
+                                    <img src={element.src} alt={element.text} onClick={this.choose_img.bind(this,element.src)}/>  
+                                {/* </Link> */}
+                            </figure>
+                        )
+                    )}
+                </StackGrid>
+                {/* <Photos/> */}
 
-                        <Button
-                        color="dark"
-                        style={{ marginTop: "1rem" }}
-                        block
-                        onClick={this.onSubmit}
-                        >
-                        Add Image
-                        </Button>
-                    </ModalBody>
-                </Modal>
+                {/* <Button
+                  color="dark"
+                  style={{ marginTop: "1rem" }}
+                  block
+                  onClick={this.onSubmit}
+                  >
+                  Add Image
+                </Button> */}
+              </ModalBody>
+            </Modal>
             
         </>
       );
