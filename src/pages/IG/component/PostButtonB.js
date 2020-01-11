@@ -1,12 +1,5 @@
 import React,{Component} from 'react';
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody
-} from 'reactstrap';
 import './IG_style.css';
-import PostImage from './PostImage';
 
 class PostButtonB extends Component{
     

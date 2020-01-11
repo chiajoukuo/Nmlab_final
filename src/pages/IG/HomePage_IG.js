@@ -25,7 +25,6 @@ class HomePageIG extends Component{
         var posts_tmp = []
         var likes = []
         var authors = []
-        var b = []
         for (i = 0; i < num; i++) {
             var post_tmp = await this.state.posting.methods.getPostByID(i).call()
             var like = await this.state.posting.methods.getWhetherUserLike(i,this.state.accounts[0]).call()

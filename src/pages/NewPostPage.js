@@ -9,7 +9,6 @@ import {
   Input
 } from "reactstrap";
 import StackGrid, { transitions, easings } from "react-stack-grid";
-import {Link } from "react-router-dom";
 import '../css/grid_style.css'
 import '../css/normalize.css'
 const transition = transitions.scaleDown;

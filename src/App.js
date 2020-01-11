@@ -13,7 +13,7 @@ import SettingPage from './pages/SettingPage';
 import NewPostPage from './pages/NewPostPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePageIG from './pages/IG/HomePage_IG'
-import HomePage_BoughtPosts from './pages/IG/HomePage_BoughtPosts'
+import HomePageBoughtPosts from './pages/IG/HomePage_BoughtPosts'
 import getWeb3 from "./utils/getWeb3";
 import Posting from "../build/contracts/Posting.json"
 import User from "../build/contracts/User.json"
@@ -74,7 +74,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path='/' render={(props) => <SettingPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/home' render={(props) => <HomePageIG {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
-                <Route exact path='/bought_posts' render={(props) => <HomePage_BoughtPosts {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
+                <Route exact path='/bought_posts' render={(props) => <HomePageBoughtPosts {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/test' component={PicturePage} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>
                 <Route path="/posts/:id?" render={(props) => <PicturePage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route path="/bought_posts/:id?" render={(props) => <PicturePageB {...props} web3={this.state.web3} posting={this.state.pu} user={this.state.user} accounts={this.state.accounts}/>} />

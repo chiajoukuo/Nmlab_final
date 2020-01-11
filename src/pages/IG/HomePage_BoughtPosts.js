@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import PostB from './component/Post_b';
 import './component/IG_style.css'
 
-class HomePageIG extends Component{
+class HomePageBoughtPosts extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -25,7 +25,6 @@ class HomePageIG extends Component{
         var posts_tmp = []
         var likes = []
         var authors = []
-        var b = []
         for (i = 0; i < num; i++) {
             var post_tmp = await this.state.posting.methods.getUsePostByID(i).call()
             var like = await this.state.posting.methods.getUseWhetherUserLike(i,this.state.accounts[0]).call()
@@ -101,4 +100,4 @@ class HomePageIG extends Component{
     
 }
 
-export default HomePageIG;
+export default HomePageBoughtPosts;

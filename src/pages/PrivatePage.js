@@ -1,5 +1,4 @@
 import React from 'react';
-import BoughtImages from '../components/BoughtImages'
 import StackGrid, { transitions, easings } from "react-stack-grid";
 import {Link } from "react-router-dom";
 import '../css/grid_style.css'
@@ -31,17 +30,17 @@ class PrivatePage extends React.Component {
     //----------buy---------
     var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
     var buys = []
-    for(var idx=0; idx<buy_ids.length; idx++){
-      var pid = buy_ids[idx]
-      var post = await this.props.posting.methods.getPostByID(pid).call()
+    for(idx=0; idx<buy_ids.length; idx++){
+      pid = buy_ids[idx]
+      post = await this.props.posting.methods.getPostByID(pid).call()
       buys.push({src:post[6], text:post[2], post_id:pid})
     }
     //----------post---------
     var post_ids = await this.props.pu.methods.getUsePostsByAddr(this.props.accounts[0]).call()
     var posts = []
-    for(var idx=0; idx<post_ids.length; idx++){
-      var pid = post_ids[idx]
-      var post = await this.props.pu.methods.getUsePostByID(pid).call()
+    for(idx=0; idx<post_ids.length; idx++){
+      pid = post_ids[idx]
+      post = await this.props.pu.methods.getUsePostByID(pid).call()
       posts.push({src:post[5], text:post[1], post_id:pid})
     }
 

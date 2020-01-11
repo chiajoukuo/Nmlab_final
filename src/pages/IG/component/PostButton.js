@@ -78,7 +78,6 @@ class PostButton extends Component{
         this.props.pur();
     }
     render(){
-        console.log(this.props)
         return(
             <>
                 <div className='post_buttons'>

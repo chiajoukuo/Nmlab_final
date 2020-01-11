@@ -2,8 +2,6 @@ import React,{Component} from 'react';
 import './IG/component/IG_style.css'
 import '../css/style.css'
 import {Button,Input} from "reactstrap";
-import Posting from "../../build/contracts/Posting.json"
-import User from "../../build/contracts/User.json"
 
 class SettingPage extends Component{
     constructor(props) {
