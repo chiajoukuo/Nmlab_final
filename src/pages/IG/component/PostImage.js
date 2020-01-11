@@ -18,7 +18,6 @@ class PostImage extends Component{
         // console.log(this.props)
         // console.log(this.state.src)
         // console.log(this.props.pic)
-
         return(
             // <Link to={link}>
                 <div className="Post-image">

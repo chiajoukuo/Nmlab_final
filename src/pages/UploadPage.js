@@ -17,6 +17,29 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
+const ipfsAPI = require('ipfs-api');
+const ipfs = ipfsAPI({
+  host: 'localhost',
+  port: '5001',
+  protocol: 'http'
+});
+
+let saveImageToIPFS = (reader) => {
+  return new Promise(function(resolve, reject) {
+      const buffer = Buffer.from(reader.result);
+      console.log(buffer)
+      
+      ipfs.add(buffer).then((response) => {
+      console.log(response)
+      resolve(response[0].hash);
+   }).catch((err) => {
+      console.error(err)
+      reject(err);
+   })
+})
+}
+
+
 class UploadPage extends React.Component {
     constructor(props) {
       super(props);
@@ -32,36 +55,15 @@ class UploadPage extends React.Component {
         url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
         url_input:'',//https://i.pinimg.com/originals/06/8d/de/068dde048a027d55b74216b801a6c2f5.png
         modal:false,
-        value:0
+        value:0,
+        isUploaded: false,
+        isUploading: false
       };
-      //this.asynConstructor();
-      
+      //this.upload = this.upload.bind(this);
+
     }
 
     UNSAFE_componentWillMount = async () => {
-      // try {
-      //     const web3 = this.props.web3
-      //     console.log('herere', web3)
-      //     const accounts = await web3.eth.getAccounts();
-      //     const networkId = await web3.eth.net.getId();
-      //     const PostingdeployedNetwork = Posting.networks[networkId];
-      //     const UserdeployedNetwork = User.networks[networkId];
-      //     const instance = new web3.eth.Contract(
-      //       Posting.abi,
-      //       PostingdeployedNetwork && PostingdeployedNetwork.address,
-      //     );
-      //     const instance1 = new web3.eth.Contract(
-      //       User.abi,
-      //       UserdeployedNetwork && UserdeployedNetwork.address,
-      //     );
-      //     this.setState({ web3, accounts, posting: instance, user: instance1 });
-      // } catch (error) {
-      //     alert(
-      //         `Failed to load web3, accounts, or contract. Check console for details.`,
-      //     );
-      //     console.error(error);
-      // }
-
       var author = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
       console.log(author)
       var author_name = author[2]
@@ -71,11 +73,9 @@ class UploadPage extends React.Component {
         photo:author_photo,
         name:author_name
       })
-
-
     };
 
-    upload_post = async() => {
+    createPost = async() => {
       console.log("upload")
       //this.setState({content:''})
       await this.state.posting.methods.createPost(this.state.content,this.state.url).send({ from: this.state.accounts[0]})
@@ -83,19 +83,6 @@ class UploadPage extends React.Component {
 
     onChange = e => {
       this.setState({ [e.target.name]: e.target.value });
-    };
-
-    onSubmit = e => {
-      // e.preventDefault();
-      
-      if (this.state.url_input !== "") {
-          //console.log(this.state.url_input)
-          this.setState({
-              url:this.state.url_input,
-              url_input:''
-          })
-          this.toggle();
-      }
     };
 
     toggle = () => {
@@ -106,7 +93,19 @@ class UploadPage extends React.Component {
           isUploaded: false
       });
     };
-
+    
+    addImage = e => {
+      // e.preventDefault();
+      if (this.state.url_input !== "") {
+          //console.log(this.state.url_input)
+          this.setState({
+              url:this.state.url_input,
+              url_input:''
+          })
+          this.toggle();
+      }
+    };
+    /*  swipe   */
     handleChange = (e, newValue) => {
         this.setState({
           value: newValue
@@ -118,11 +117,14 @@ class UploadPage extends React.Component {
             value: index
         });
     };
+    /*  load   */  
+
 
     loader = () => {
         const { isUploading, isUploaded } = this.state;
         if (isUploading) {
           // isUploading
+          console.log('is uploading')
           return (
             <div
               className="spinner-border text-info"
@@ -134,6 +136,7 @@ class UploadPage extends React.Component {
           );
         } else if (!isUploading && isUploaded) {
           // !isUploading && isUploaded
+          console.log('is uploaded')
           return (
             <img
               src="https://image.flaticon.com/icons/svg/179/179372.svg"
@@ -150,6 +153,21 @@ class UploadPage extends React.Component {
             isUploading: true,
             isUploaded: false,
         });
+        console.log(this)
+        console.log(this.refs)
+        var file = this.refs.file.files[0];
+        console.log(file);
+        var reader = new FileReader();
+        reader.readAsArrayBuffer(file)
+        reader.onloadend = function(e) {
+          console.log(reader);
+          console.log(this.refs.file.files);
+          
+          saveImageToIPFS(reader).then((hash) => {
+            console.log(hash);
+            this.setState({imageHash: hash})
+          });
+            }.bind(this);
     };
 
 
@@ -169,18 +187,13 @@ class UploadPage extends React.Component {
                       <div className="Post-user-nickname" style={{color:'black'}}>
                           <span>{this.state.name}</span>
                       </div>
-                      
                   </div>
               </header>
-
-
               <div className="Post-image">
                   <div className="Post-image-bg">
                       <img alt="Upload your own." src={this.state.url} onClick={this.toggle } className='uploader'/>
                   </div>
               </div>
-
-
               <div className='post_buttons'>
                 <img className='like_button_static' src='https://image.flaticon.com/icons/svg/149/149217.svg' alt='like_button'/>
                 <span className='like_num'>0</span>
@@ -202,7 +215,7 @@ class UploadPage extends React.Component {
                 />
               </div>
               <div>
-                <Button size="sm" onClick={this.upload_post} style={{ marginBottom: "5px"}} >
+                <Button size="sm" onClick={this.createPost} style={{ marginBottom: "5px"}} >
                   Upload
                   <CloudUploadIcon
                   size="small"
@@ -268,19 +281,16 @@ class UploadPage extends React.Component {
                                 <Form>
                                 <FormGroup>
                                     <Label for="upload">Select An Image File</Label>
-                                    <Input type="file" name="file" id="upload" />
+                                    <Input type="file" name="file" ref="file" id="upload" multiple="multiple"/>
                                     <div
                                     id="upload-btn"
                                     style={{ float: "right", marginTop: "0px" }}
                                     >
-                                    {this.loader()}
-                                    <Button size="sm" onClick={this.upload}>
-                                        Upload
-                                        <CloudUploadIcon
-                                        size="small"
-                                        style={{ marginLeft: "5px" }}
-                                        />
-                                    </Button>
+                                      {this.loader()}
+                                      <Button size="sm" onClick={this.upload}>
+                                          Upload
+                                          <CloudUploadIcon size="small" style={{ marginLeft: "5px" }}/>
+                                      </Button>
                                     </div>
                                 </FormGroup>
                                 </Form>
@@ -290,7 +300,7 @@ class UploadPage extends React.Component {
                         color="dark"
                         style={{ marginTop: "1rem" }}
                         block
-                        onClick={this.onSubmit}
+                        onClick={this.addImage}
                         >
                         Add Image
                         </Button>

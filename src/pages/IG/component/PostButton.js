@@ -72,8 +72,8 @@ class PostButton extends Component{
         });
         //console.log('toggle')
     }
-    purchase=()=>{
-        console.log("purchase")
+    purchase = async() =>{
+        await this.state.posting.methods.addUser(this.state.post_id).send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
         this.toggle()
     }
     render(){
@@ -91,7 +91,8 @@ class PostButton extends Component{
                     <ModalHeader onClick={this.toggle}>Purchase this image.</ModalHeader>
                     <ModalBody>
                         {/* purchase information */}
-                        <img src={this.props.photo} alt='purchase photo' />
+                        {/* <img src={this.props.photo} alt='purchase photo' /> */}
+                        <PostImage pic = {this.props.photo} />
                         <div>
                             NT$ 0.01
                         </div>
