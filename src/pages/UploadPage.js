@@ -27,10 +27,9 @@ const ipfs = ipfsAPI({
 let saveImageToIPFS = (reader) => {
   return new Promise(function(resolve, reject) {
       const buffer = Buffer.from(reader.result);
-      console.log(buffer)
-      
+      //console.log(buffer)
       ipfs.add(buffer).then((response) => {
-      console.log(response)
+      //console.log(response)
       resolve(response[0].hash);
    }).catch((err) => {
       console.error(err)
@@ -54,6 +53,7 @@ class UploadPage extends React.Component {
         content:'',
         url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
         url_input:'',//https://i.pinimg.com/originals/06/8d/de/068dde048a027d55b74216b801a6c2f5.png
+        upload_url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
         modal:false,
         value:0,
         isUploaded: false,
@@ -65,15 +65,39 @@ class UploadPage extends React.Component {
 
     UNSAFE_componentWillMount = async () => {
       var author = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
-      console.log(author)
+      //console.log(author)
       var author_name = author[2]
       var author_photo = author[1]
-      console.log(author_name,author_photo)
+      //console.log(author_name,author_photo)
       this.setState({
         photo:author_photo,
         name:author_name
       })
     };
+
+    componentDidUpdate(prevProps, prevState) {
+      //console.log("state",this.state)
+      //console.log("props",this.props)
+      //console.log(prevState.upload_url, "=>", this.state.upload_url)
+      //console.log(this.state.value)
+      if(prevState.upload_url!== this.state.upload_url){
+        //console.log(prevState.upload_url, "=>", this.state.upload_url)
+        this.setState({
+          isUploaded: true,
+          isUploading: false
+        })
+      }
+      // if (
+      //   this.props.upload.upload !== null &&
+      //   prevProps.upload !== this.props.upload
+      // ) {
+      //   this.setState({
+      //     url: this.props.upload.upload.file,
+      //     isUploading: false,
+      //     isUploaded: true
+      //   });
+      // }
+    }
 
     createPost = async() => {
       console.log("upload")
@@ -96,13 +120,20 @@ class UploadPage extends React.Component {
     
     addImage = e => {
       // e.preventDefault();
-      if (this.state.url_input !== "") {
+      if (this.state.value===0 && this.state.url_input !== "") {
           //console.log(this.state.url_input)
           this.setState({
               url:this.state.url_input,
               url_input:''
           })
           this.toggle();
+      }
+      else if(this.state.upload_url!==""){
+        this.setState({
+          url:this.state.upload_url,
+          upload_url:''
+        })
+        this.toggle();
       }
     };
     /*  swipe   */
@@ -149,25 +180,30 @@ class UploadPage extends React.Component {
         }
     };
     upload = e => {
+      
+      var file = this.refs.file.files[0];
+      //console.log(this.refs.file.files[0]);
+      if(file){
         this.setState({
-            isUploading: true,
-            isUploaded: false,
+          isUploading: true,
+          isUploaded: false,
         });
-        console.log(this)
-        console.log(this.refs)
-        var file = this.refs.file.files[0];
-        console.log(file);
         var reader = new FileReader();
         reader.readAsArrayBuffer(file)
         reader.onloadend = function(e) {
-          console.log(reader);
-          console.log(this.refs.file.files);
-          
-          saveImageToIPFS(reader).then((hash) => {
-            console.log(hash);
-            this.setState({imageHash: hash})
-          });
-            }.bind(this);
+        //console.log(reader);
+        //console.log(this.refs.file.files);
+        saveImageToIPFS(reader).then((hash) => {
+          //console.log("hash",hash);
+          this.setState({upload_url: "http://localhost:8080/ipfs/"+hash})
+        });
+        }.bind(this);
+      }
+      else{
+        alert(
+          `Please choose a file before upload.`,
+        );
+      }
     };
 
 
@@ -225,6 +261,29 @@ class UploadPage extends React.Component {
               </div>
 
             </article>
+            {/* <div style={{marginTop:10}}>上传图片到IPFS：</div>
+            <div>
+              <label id="file">选择图片</label>
+              <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
+            </div>
+            <button onClick={this.handleUpload}>Try</button>
+            <button style={{marginTop:10}} onClick={() => {
+            var file = this.refs.file.files[0];
+            console.log(file);
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(file)
+            reader.onloadend = function(e) {
+              console.log(reader);
+              console.log(this.refs.file.files);
+              
+              saveImageToIPFS(reader).then((hash) => {
+                console.log(hash);
+                this.setState({imageHash: hash})
+              });
+                }.bind(this);
+                
+              }}>开始上传</button>
+               */}
             <div className='between'></div>
             <div className='foot'></div>
 
@@ -280,14 +339,17 @@ class UploadPage extends React.Component {
                             >
                                 <Form>
                                 <FormGroup>
-                                    <Label for="upload">Select An Image File</Label>
-                                    <Input type="file" name="file" ref="file" id="upload" multiple="multiple"/>
+                                    <label id="upload">Select An Image File</label>
+                                    <input type="file" name="file" ref="file" id="upload" multiple="multiple" accept=".gif,.png,.jpg"/>
+                                    <div>
+                                      <img style={{width: 300}}src={this.state.upload_url} alt=""/>
+                                    </div>
                                     <div
                                     id="upload-btn"
                                     style={{ float: "right", marginTop: "0px" }}
                                     >
                                       {this.loader()}
-                                      <Button size="sm" onClick={this.upload}>
+                                      <Button size="sm" onClick = {this.upload} style={{ marginLeft: "20px" }}>
                                           Upload
                                           <CloudUploadIcon size="small" style={{ marginLeft: "5px" }}/>
                                       </Button>

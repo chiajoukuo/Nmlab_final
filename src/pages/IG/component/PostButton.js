@@ -36,7 +36,7 @@ class PostButton extends Component{
     }
     UNSAFE_componentWillMount = async () => {
         var like = await this.state.posting.methods.getWhetherUserLike(this.state.post_id).call()
-        console.log(this.state.accounts, this.state.post_id,like)
+        //console.log(this.state.accounts, this.state.post_id,like)
         if(like){
             this.setState({
                 src:this.src[1],
