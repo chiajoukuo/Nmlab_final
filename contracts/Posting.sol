@@ -5,7 +5,6 @@ contract Posting {
   struct Post {
     address payable authorID;
     string pic;
-    uint userNum;
     address[] users;
     address[] whoLike;
     string postInfo;
@@ -43,7 +42,7 @@ contract Posting {
     address, uint, string memory, uint, address[] memory, uint, string memory) {
     return (
       posts[_postID].authorID,
-      posts[_postID].userNum,
+      posts[_postID].users.length,
       posts[_postID].postInfo,
       posts[_postID].whoLike.length,
       posts[_postID].whoLike,
