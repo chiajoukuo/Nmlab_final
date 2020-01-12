@@ -22,7 +22,7 @@ contract TestPostingUse{
         PostingUse posting = PostingUse(DeployedAddresses.PostingUse());
         string memory postInfo = "I love Hannah #H&J";
         string memory pic = "123456";
-        uint num = posting.createUsePost(postInfo, pic);
+        uint num = posting.createUsePost(postInfo, pic, 1);
         Assert.equal(1, posting.getUsePostNum(), "There should be 1 post after create post");
         Assert.equal(1, num, "There should be 1 post after create post");
     }
@@ -36,7 +36,8 @@ contract TestPostingUse{
         string memory postInfo;
         uint msgnum;
         string memory pic;
-        (authorID, postInfo, likeNum, whoLike, msgnum, pic) = posting.getUsePostByID(0);
+        uint picc;
+        (authorID, postInfo, likeNum, whoLike, msgnum, pic, picc) = posting.getUsePostByID(0);
         Assert.equal(postInfo, "I love Hannah #H&J", "Postinfo should be equal");
         Assert.equal(authorID, address(this), "AuthorID should be equal");
     }
@@ -69,9 +70,9 @@ contract TestPostingUse{
 
     function testHashtag() public{
         PostingUse posting = PostingUse(DeployedAddresses.PostingUse());
-        posting.createUsePost("I love Hannah #H&J#yo", "123196969696956969696969696969696969696");
-        posting.createUsePost("I love Hannah #H&", "123196596969696969696969696969696969696");
-        posting.createUsePost("I love Hannah #H&J", "123519696969696969696969696969696969696");
+        posting.createUsePost("I love Hannah #H&J#yo", "123196969696956969696969696969696969696", 1);
+        posting.createUsePost("I love Hannah #H&", "123196596969696969696969696969696969696", 1);
+        posting.createUsePost("I love Hannah #H&J", "123519696969696969696969696969696969696", 1);
         uint[] memory posts = posting.getUsePostByHashtag("H&J");
         Assert.equal(0, posts[0], "First post ID");
         Assert.equal(1, posts[1], "Second post ID");

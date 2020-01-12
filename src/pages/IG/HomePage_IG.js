@@ -32,7 +32,8 @@ class HomePageIG extends Component{
             posting:this.props.posting,
             user:this.props.user,
 
-            posts_id : [],
+            posts_index : [],
+            posttsd : [],
             post_num : 0,
             posts: [],
             likes:[]
@@ -40,15 +41,15 @@ class HomePageIG extends Component{
     }
 
     UNSAFE_componentWillMount = async () => {
-        var num = await this.state.posting.methods.getPostNum().call();
+        var picArr = await this.state.posting.methods.getAllPost().call();
         var i;
-        var posts_id = []
+        var posts_idx = []
         var posts_tmp = []
         var likes = []
         var authors = []
-        for (i = 0; i < num; i++) {
-            var post_tmp = await this.state.posting.methods.getPostByID(i).call()
-            var like = await this.state.posting.methods.getWhetherUserLike(i,this.state.accounts[0]).call()
+        for (i = 0;i<picArr.length; i++) {
+            var post_tmp = await this.state.posting.methods.getPostByID(picArr[i]).call()
+            var like = await this.state.posting.methods.getWhetherUserLike(picArr[i],this.state.accounts[0]).call()
             var author = await this.state.user.methods.getAuthorByAddr(post_tmp[0]).call()
             
             //post_tmp.push(like)
@@ -62,13 +63,13 @@ class HomePageIG extends Component{
             posts_tmp.push(post_tmp)
             likes.push(like)
             authors.push(author)
-            posts_id.push(i)
+            posts_idx.push(i)
         }
 
         this.setState({
-            post_num : num,
-            
-            posts_id: posts_id,
+            post_num : picArr.length,
+            posts_id : picArr,
+            posts_index: posts_idx,
             posts: posts_tmp,
             likes : likes,
             authors : authors,
@@ -80,14 +81,14 @@ class HomePageIG extends Component{
         return(
             <>
                 <div className='homepage_ig'>
-                    {this.state.posts_id.map(
+                    {this.state.posts_index.map(
                         (idx,post_id_element)=>{
                             if(this.state.posts.length){
                                 return(
                                     <React.Fragment key={post_id_element}>
                                         <div className='between'></div>
                                         <Post 
-                                            post_id={post_id_element}
+                                            post_id={this.state.posts_id[post_id_element]}
                                             authorID = {this.state.posts[post_id_element][0]}
                                             author = {this.state.authors[post_id_element][2]}
                                             author_pic = {this.state.authors[post_id_element][1]}

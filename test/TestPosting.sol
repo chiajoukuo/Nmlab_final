@@ -22,10 +22,10 @@ contract TestPosting{
         Posting posting = Posting(DeployedAddresses.Posting());
         string memory postInfo = "I love Hannah #H&J";
         string memory pic = "123456";
-        uint num = posting.createPost(postInfo, pic);
-        Assert.equal(1, posting.getPostNum(), "There should be 1 post after create post");
+        uint num = posting.createPost(postInfo, pic, "666");
+        Assert.equal(1, posting.getPostNum(), "There sho666uld be 1 post after create post");
         Assert.equal(1, num, "There should be 1 post after create post");
-        Assert.equal(0, posting.createPost(postInfo, pic), "Output should be zero after error create");
+        Assert.equal(0, posting.createPost(postInfo, pic, "666"), "Output should be zero after error create");
     }
 
     function testGetPost() public{
@@ -80,9 +80,9 @@ contract TestPosting{
 */
     function testHashtag() public{
         Posting posting = Posting(DeployedAddresses.Posting());
-        posting.createPost("I love Hannah #H&J#yo", "123196969696956969696969696969696969696");
-        posting.createPost("I love Hannah #H&", "123196596969696969696969696969696969696");
-        posting.createPost("I love Hannah #H&J", "123519696969696969696969696969696969696");
+        posting.createPost("I love Hannah #H&J#yo", "123196969696956969696969696969696969696", "666");
+        posting.createPost("I love Hannah #H&", "123196596969696969696969696969696969696", "666");
+        posting.createPost("I love Hannah #H&J", "123519696969696969696969696969696969696", "666");
         uint[] memory posts = posting.getPostByHashtag("H&J");
         Assert.equal(0, posts[0], "First post ID");
         Assert.equal(1, posts[1], "Second post ID");

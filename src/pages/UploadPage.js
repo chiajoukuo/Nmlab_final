@@ -24,6 +24,7 @@ const ipfs = ipfsAPI({
   port: '5001',
   protocol: 'http'
 });
+const imghash = require('imghash');
 
 let saveImageToIPFS = (reader) => {
   return new Promise(function(resolve, reject) {
@@ -33,6 +34,19 @@ let saveImageToIPFS = (reader) => {
       //console.log(response)
       resolve(response[0].hash);
    }).catch((err) => {
+      console.error(err)
+      reject(err);
+   })
+})
+}
+
+let getImgHash = (reader) => {
+  return new Promise(function(resolve, reject) {
+    const buffer = Buffer.from(reader.result);
+    imghash.hash(buffer).then((response) => {
+      console.log(response)
+      resolve(response);
+    }).catch((err) => {
       console.error(err)
       reject(err);
    })
@@ -54,6 +68,7 @@ class UploadPage extends React.Component {
         content:'',
         url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
         url_input:'',//https://i.pinimg.com/originals/06/8d/de/068dde048a027d55b74216b801a6c2f5.png
+        imgHash:'',
         upload_url:'http://www.freeiconspng.com/uploads/upload-icon-30.png',
         modal:false,
         value:0,
@@ -98,7 +113,17 @@ class UploadPage extends React.Component {
     createPost = async() => {
       console.log("upload")
       //this.setState({content:''})
-      await this.state.posting.methods.createPost(this.state.content,this.state.url).send({ from: this.state.accounts[0]})
+      this.state.posting.events.CreatePost(function(error, result){
+        if (!error) {
+          //console.log(result.returnValues.success);
+          if (result.returnValues.success === false){
+            alert(
+              `Picture duplication!`,
+            );
+          }
+        }
+      });
+      await this.state.posting.methods.createPost(this.state.content,this.state.url,this.state.imgHash).send({ from: this.state.accounts[0]})
       let path = `/home`;
       this.props.history.push(path);
     }
@@ -122,7 +147,8 @@ class UploadPage extends React.Component {
           //console.log(this.state.url_input)
           this.setState({
               url:this.state.url_input,
-              url_input:''
+              url_input:'',
+              imgHash:''
           })
           this.toggle();
       }
@@ -193,6 +219,10 @@ class UploadPage extends React.Component {
         saveImageToIPFS(reader).then((hash) => {
           //console.log("hash",hash);
           this.setState({upload_url: "http://localhost:8080/ipfs/"+hash})
+        });
+        getImgHash(reader).then((hash) => {
+          //console.log("hash",hash);
+          this.setState({imgHash: hash})
         });
         }.bind(this);
       }

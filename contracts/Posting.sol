@@ -5,6 +5,7 @@ contract Posting {
   struct Post {
     address payable authorID;
     string pic;
+    string picHash;
     address[] users;
     address[] whoLike;
     string postInfo;
@@ -18,7 +19,7 @@ contract Posting {
   /******************
     post Basic Part
   *******************/
-  function createPost(string memory _postInfo, string memory _pic) public returns (uint) {
+  function createPost(string memory _postInfo, string memory _pic, string memory _picHash) public returns (uint) {
     for (uint i = 0;i<posts.length;i++){
       if (keccak256(bytes(posts[i].pic)) == keccak256(bytes(_pic))){
         emit CreatePost(false, 0);
@@ -27,12 +28,14 @@ contract Posting {
     }
     Post memory myPost;
     myPost.pic = _pic;
+    myPost.picHash = _picHash;
     myPost.authorID = msg.sender;
     myPost.postInfo = _postInfo;
     uint id = posts.push(myPost);
     emit CreatePost(true, id);
     return id;
   }
+
 
   function deletePost(uint _postID) public validPostID(_postID) {
     posts[_postID].pic = "";
@@ -49,6 +52,10 @@ contract Posting {
       posts[_postID].msgs.length,
       posts[_postID].pic
     );
+  }
+
+  function getPicHashByID(uint _postID) public view validPostID(_postID) returns(string memory){
+    return posts[_postID].picHash;
   }
 
   function getPostNum() public view returns(uint) {

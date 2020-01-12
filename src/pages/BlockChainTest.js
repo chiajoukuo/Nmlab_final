@@ -19,21 +19,26 @@ deepai.setApiKey('quickstart-QUdJIGlzIGNvbWluZy4uLi4K');
 let saveImageToIPFS = (reader) => {
   return new Promise(function(resolve, reject) {
       const buffer = Buffer.from(reader.result);
-      console.log(buffer)
-      imghash.hash(buffer).then((response) => {
-        console.log(response)
-      }).catch((err) => {
-        console.error(err)
-        reject(err);
-     })
-/*
       ipfs.add(buffer).then((response) => {
       console.log(response)
       resolve(response[0].hash);
    }).catch((err) => {
       console.error(err)
       reject(err);
-   })*/
+   })
+})
+}
+
+let getHash = (reader) => {
+  return new Promise(function(resolve, reject) {
+    const buffer = Buffer.from(reader.result);
+    imghash.hash(buffer).then((response) => {
+      console.log(response)
+      resolve(response);
+    }).catch((err) => {
+      console.error(err)
+      reject(err);
+   })
 })
 }
 
@@ -67,7 +72,7 @@ class BlockChainTest extends React.Component {
       this.setState({balance: await this.state.posting.methods.getBalance().call()});
 
       if (await this.state.posting.methods.getPostNum().call() === "0"){
-        await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
+        await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "12319696969696969696969696969696969696", "").send({ from: this.state.accounts[0]});
       }
     } catch (error) {
       alert(
@@ -209,6 +214,10 @@ class BlockChainTest extends React.Component {
           saveImageToIPFS(reader).then((hash) => {
             console.log(hash);
             this.setState({imageHash: hash})
+          });
+          getHash(reader).then((hash) => {
+            console.log(hash)
+            this.setState({texting:hash})
           });
             }.bind(this);
             Promise

@@ -18,57 +18,32 @@ class AdminPage extends React.Component {
         super();
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCompare = this.handleCompare.bind(this);
+        this.handelDelete = this.handelDelete.bind(this);
     }
 
     componentWillMount() {
         this.setState({
-            allPic: [], picIndex: [], picID1: 'UNKNOWN', picID2: 'UNKNOWN', sim: 'UNKNOWN', ID1url: 'UNKNOWN', ID2url: 'UNKNOWN'
+            allPic: [], picIndex: [], picID1: 'UNKNOWN', picID2: 'UNKNOWN', sim: 'UNKNOWN', ID1hash: '', ID2hash: '', similarPair: []
         });
     }
 
+    
 
     handleCompare = async() => {
-        console.log(this.state.ID1url)
-        console.log(this.state.ID2url)
-        console.log("First")
-        /*
-        var urlreader = new FileReader();
-        var request = new XMLHttpRequest();
-        request.open('GET', this.state.ID1url, true);
-        request.responseType = 'blob';
-        request.onload = function() { 
-                urlreader.readAsDataURL(request.response);
-                urlreader.onload =  function(e){
-                const buffer = Buffer.from(urlreader.result);
-                imghash.hash(buffer).then((hash) => {
-                    console.log(hash); // '1000100010000010'
-                  }).catch(error => {
-                    // Auto-play was prevented
-                    // Show paused UI.
-                    console.log("playback prevented");
-                  });        
-            };
-        };
-        request.send();
-        */
-       Promise
-        .all(["4747474747873f09", "8e0f0f0f0f0f1f16"])
-        .then((results) => {
-            const dist = leven(results[0], results[1]);
-            console.log(`Distance between images is: ${dist}`);
-            if (dist <= 12) {
-            console.log('Images are similar');
-            } else {
-            console.log('Images are NOT similar');
-            }
-        });
-        console.log("Second")
-
-        /*imghash
-        .hash('/home/Desktop/child.jpg')
-        .then((hash) => {
-            console.log(hash); // 'f884c4d8d1193c07'
-        });*/
+        console.log(this.state.ID1hash)
+        console.log(this.state.ID2hash)
+        if (this.state.ID1hash!=="" && this.state.ID2hash!==""){
+          Promise
+          .all([this.state.ID1hash, this.state.ID2hash])
+          .then((results) => {
+              const dist = leven(results[0], results[1]);
+              this.setState({sim: dist})
+          });
+        }
+        else{
+          this.setState({sim: -1})
+        }
+       
         /*
         var resp = await deepai.callStandardApi("image-similarity", {
             image1: this.state.ID1url,
@@ -76,6 +51,13 @@ class AdminPage extends React.Component {
         });*/
         //this.setState({sim: resp.output.distance});
     }
+
+    handelDelete = async(event) =>{
+      event.preventDefault();
+      const datas = new FormData(event.target);
+      console.log(datas.get('id'));
+    }
+
 
     handleSubmit = async(event) => {
         event.preventDefault();
@@ -90,16 +72,20 @@ class AdminPage extends React.Component {
         }
         var ID1est = false;
         var ID2est = false;
+        var ID1Hash;
+        var ID2Hash;
         var ID1pic;
         var ID2pic;
         for (var i=0;i<this.state.picIndex.length;i++){
             if (data.get('id1') === this.state.picIndex[i]){
-                ID1est =true;
+                ID1est = true;
                 ID1pic = this.state.allPic[i].pic;
+                ID1Hash = await this.state.posting.methods.getPicHashByID(this.state.picIndex[i]).call();
             }
             if (data.get('id2') === this.state.picIndex[i]){
-                ID2est =true;
+                ID2est = true;
                 ID2pic = this.state.allPic[i].pic;
+                ID2Hash = await this.state.posting.methods.getPicHashByID(this.state.picIndex[i]).call();
             }
         }
         if (ID1est===false || ID2est===false){
@@ -108,7 +94,7 @@ class AdminPage extends React.Component {
               );
             return
         }
-        await this.setState({picID1: ID1, picID2: ID2, ID1url: ID1pic, ID2url: ID2pic})
+        await this.setState({picID1: ID1, picID2: ID2, ID1hash: ID1Hash, ID2hash: ID2Hash, ID1url: ID1pic, ID2url: ID2pic})
         await this.handleCompare();
       }
       
@@ -152,6 +138,11 @@ class AdminPage extends React.Component {
           <div height="100%" border="0">
             <h1>AdminPage</h1>
             <h2> ============</h2>
+            <form onSubmit = {this.handelDelete}>
+              <label htmlFor="Input String">{"Delete picture:"}</label>
+              <input id="Delete ID" placeholder="ID" name="id" type="text" />
+              <input type="submit" value="Send!"/>
+            </form>
             <form onSubmit={this.handleSubmit}>
                 <label htmlFor="Input String">{"Compare two ID's picture:"}</label>
                 <input id="useid1rname" placeholder="ID1" name="id1" type="text" />
@@ -165,6 +156,7 @@ class AdminPage extends React.Component {
                 <img style={{height: 300 }} src={this.state.ID1url}/>
                 <img style={{height: 300 }} src={this.state.ID2url}/>
             </div>
+            <h2> ============</h2>
             {this.state.allPic.map(item => {
               return (
               <div key={item.id}> 
