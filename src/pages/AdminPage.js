@@ -8,7 +8,6 @@ deepai.setApiKey('quickstart-QUdJIGlzIGNvbWluZy4uLi4K');
 
 
 const leven = require('leven');
-const imghash = require('imghash');
 
 
 
@@ -19,19 +18,24 @@ class AdminPage extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCompare = this.handleCompare.bind(this);
         this.handelDelete = this.handelDelete.bind(this);
+        this.handleDeleteAll = this.handleDeleteAll.bind(this);
     }
 
     componentWillMount() {
         this.setState({
-            allPic: [], picIndex: [], picID1: 'UNKNOWN', picID2: 'UNKNOWN', sim: 'UNKNOWN', ID1hash: '', ID2hash: '', similarPair: []
+            allPic: [], picIndex: [], picID1: 'Unknown', picID2: 'Unknown', sim: 'Unknown', ID1hash: '', ID2hash: '', deep: "Unknown", similarPair: [], delete: []
         });
+    }
+
+    handleDeleteAll = async() => {
+      for (var i=0;i<this.state.delete.length;i++){
+        await this.state.posting.methods.deletePost(this.state.delete[i]).send({ from: this.state.accounts[0]});
+      }
     }
 
     
 
     handleCompare = async() => {
-        console.log(this.state.ID1hash)
-        console.log(this.state.ID2hash)
         if (this.state.ID1hash!=="" && this.state.ID2hash!==""){
           Promise
           .all([this.state.ID1hash, this.state.ID2hash])
@@ -44,18 +48,44 @@ class AdminPage extends React.Component {
           this.setState({sim: -1})
         }
        
-        /*
+        
         var resp = await deepai.callStandardApi("image-similarity", {
             image1: this.state.ID1url,
             image2: this.state.ID2url,
-        });*/
-        //this.setState({sim: resp.output.distance});
+        });
+        this.setState({deep: resp.output.distance});
+    }
+
+    hashCompare = async(hash1,hash2, id1, id2) => {
+      var cool = false;
+      // console.log(id1);
+      // console.log(id2);
+      // console.log(hash1);
+      // console.log(hash2);
+      if (hash1!=="" && hash2!==""){
+        Promise
+        .all([hash1, hash2])
+        .then((results) => {
+            var dist = leven(results[0], results[1]);
+            // console.log(dist);
+            if (dist<12){
+              cool = true;
+              var joined = this.state.similarPair.concat([[id1, id2, dist]]);
+              this.setState({similarPair: joined, finish: true});
+              if (dist<5){
+                var joind = this.state.delete.concat(id2);
+                this.setState({delete:joind});
+              }
+            }
+        });
+      }
     }
 
     handelDelete = async(event) =>{
       event.preventDefault();
       const datas = new FormData(event.target);
-      console.log(datas.get('id'));
+      //console.log(datas.get('id'));
+      await this.state.posting.methods.deletePost(datas.get('id')).send({ from: this.state.accounts[0]});
     }
 
 
@@ -94,7 +124,7 @@ class AdminPage extends React.Component {
               );
             return
         }
-        await this.setState({picID1: ID1, picID2: ID2, ID1hash: ID1Hash, ID2hash: ID2Hash, ID1url: ID1pic, ID2url: ID2pic})
+        this.setState({picID1: ID1, picID2: ID2, ID1hash: ID1Hash, ID2hash: ID2Hash, ID1url: ID1pic, ID2url: ID2pic})
         await this.handleCompare();
       }
       
@@ -111,19 +141,25 @@ class AdminPage extends React.Component {
           );
           this.setState({ web3, accounts, posting: instance });
           this.setState({balance: await this.state.posting.methods.getBalance().call()});
-    
-          if (await this.state.posting.methods.getPostNum().call() === "0"){
-            await this.state.posting.methods.createPost("I love Hannah #H&J#yo", "12319696969696969696969696969696969696").send({ from: this.state.accounts[0]});
-          }
           
           const picArr = await this.state.posting.methods.getAllPost().call();
-          console.log(picArr);
           var arr = [];
+          var hasharr = [];
           for (var i = 0;i<picArr.length; i++){
               var postTmp = await this.state.posting.methods.getPostByID(picArr[i]).call();
               arr.push({id : picArr[i], pic : postTmp[6]});
+              hasharr.push(await this.state.posting.methods.getPicHashByID(picArr[i]).call());
           }
-          this.setState({allPic: arr, picIndex: picArr});
+          this.setState({allPic: arr, picIndex: picArr, hashArr: hasharr});
+          for(var i=0;i<picArr.length; i++){
+            this.setState({finish:false})
+            for(var j=0;j<i;j++){
+              await this.hashCompare(this.state.hashArr[j], this.state.hashArr[i], picArr[j], picArr[i]);
+              if (this.state.finish){
+                break;
+              }
+            }
+          }
 
         } catch (error) {
           alert(
@@ -151,12 +187,25 @@ class AdminPage extends React.Component {
             </form>
             <h5>{"ID1: " + this.state.picID1}</h5>
             <h5>{"ID2: " + this.state.picID2}</h5>
-            <h5>{"Similarity: " + this.state.sim}</h5>
+            <h5>{"Imghash Similarity: " + this.state.sim}</h5>
+            <h5>{"DeepAI result:" + this.state.deep}</h5>
             <div>
-                <img style={{height: 300 }} src={this.state.ID1url}/>
-                <img style={{height: 300 }} src={this.state.ID2url}/>
+                <img style={{height: 200 }} src={this.state.ID1url}/>
+                <img style={{height: 200 }} src={this.state.ID2url}/>
             </div>
-            <h2> ============</h2>
+            <h2> =============</h2>
+            <h3>{"Posts that should be deleted:" + this.state.delete}</h3>
+            <button onClick={this.handleDeleteAll}>Delete above all!</button>
+            <h2> =============</h2>
+            <h2> Highly similar pair!</h2>
+            <div>{"ID1         ID2         SIM"}</div>
+            {this.state.similarPair.map(item => {
+              return (<div key={item[1]}>{item[0] + " --- " +item[1] + " --- " + item[2]}</div>)
+            })
+
+            }
+            <h2> =============</h2>
+            <h2> All posts!</h2>
             {this.state.allPic.map(item => {
               return (
               <div key={item.id}> 
