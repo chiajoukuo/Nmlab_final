@@ -3,7 +3,9 @@ import React from 'react';
 import getWeb3 from "../utils/getWeb3";
 import Posting from "../../build/contracts/Posting.json"
 import User from "../../build/contracts/User.json"
+const leven = require('leven');
 
+const imghash = require('imghash');
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({
   host: 'localhost',
@@ -18,14 +20,20 @@ let saveImageToIPFS = (reader) => {
   return new Promise(function(resolve, reject) {
       const buffer = Buffer.from(reader.result);
       console.log(buffer)
-      
+      imghash.hash(buffer).then((response) => {
+        console.log(response)
+      }).catch((err) => {
+        console.error(err)
+        reject(err);
+     })
+/*
       ipfs.add(buffer).then((response) => {
       console.log(response)
       resolve(response[0].hash);
    }).catch((err) => {
       console.error(err)
       reject(err);
-   })
+   })*/
 })
 }
 
@@ -37,7 +45,7 @@ class BlockChainTest extends React.Component {
     this.handleUpload = this.handleUpload.bind(this);
     this.handleSimilarity = this.handleSimilarity.bind(this);
     this.handleCreateAuthor = this.handleCreateAuthor.bind(this);
-    this.state = {texting: 'Hello world', balance: 0, imageHash: null};
+    this.state = {texting: 'Hello world', balance: 0, imageHash: "QmSZoS9n8Kj2dAPSdGmi1cHG7GgLAqsCZ5Eo134aRmTzEH"};
   }
 
   componentDidMount = async () => {
@@ -72,7 +80,7 @@ class BlockChainTest extends React.Component {
   handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.target);
-    console.log('Start');
+    console.log(data);
     await this.state.posting.methods.SetMessage(data.get('username')).send({ from: this.state.accounts[0]});
     console.log('after set');
     console.log(await this.state.posting.methods.SayHello().call());
@@ -197,13 +205,47 @@ class BlockChainTest extends React.Component {
         reader.readAsArrayBuffer(file)
         reader.onloadend = function(e) {
           console.log(reader);
-          console.log(this.refs.file.files);
           
           saveImageToIPFS(reader).then((hash) => {
             console.log(hash);
             this.setState({imageHash: hash})
           });
             }.bind(this);
+            Promise
+            .all(["c547474747873f09", "4747474747873f09"])
+            .then((results) => {
+                const dist = leven(results[0], results[1]);
+                console.log(`Distance between images is: ${dist}`);
+                if (dist <= 12) {
+                console.log('Images are similar');
+                } else {
+                console.log('Images are NOT similar');
+                }
+            });
+            /*
+            var urlreader = new FileReader();
+            var request = new XMLHttpRequest();
+            request.open('GET', "http://localhost:8080/ipfs/" + this.state.imageHash, true);
+            request.responseType = 'blob';
+            request.onload = function() {
+                
+                urlreader.readAsDataURL(request.response);
+                urlreader.onload =  function(e){
+                    console.log('DataURL:', e.target.result);
+                    const buffer = Buffer.from(urlreader.result);
+                    console.log(buffer);
+                    saveImageToIPFS(urlreader).then((urlhash) => {
+                      console.log(urlhash);
+                      this.setState({imageHash: urlhash})
+                    });
+                };
+            }.bind(this);
+            request.send();
+            console.log(urlreader)
+            */
+            
+            
+            
             
            }}>开始上传</button>
            <div>{"http://localhost:8080/ipfs/" + this.state.imageHash}</div>
