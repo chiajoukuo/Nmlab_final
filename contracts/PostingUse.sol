@@ -7,6 +7,7 @@ contract PostingUse {
     address payable authorID;
     string pic;
     uint userNum;
+    uint origPicID;
     address[] whoLike;
     string postInfo;
     string[] msgs;
@@ -19,24 +20,26 @@ contract PostingUse {
   /*****************************
          usePost Basic Part
   *******************************/
-  function createUsePost(string memory _postInfo, string memory _pic) public returns (uint) {
+  function createUsePost(string memory _postInfo, string memory _pic, uint _origPicID) public returns (uint) {
     UsePost memory myPost;
     myPost.pic = _pic;
     myPost.authorID = msg.sender;
     myPost.postInfo = _postInfo;
+    myPost.origPicID = _origPicID;
     uint id = usePosts.push(myPost);
     return id;
   }
 
   function getUsePostByID(uint _postID) public view validUsePostID(_postID) returns(
-    address, string memory, uint, address[] memory, uint, string memory) {
+    address, string memory, uint, address[] memory, uint, string memory, uint) {
     return (
       usePosts[_postID].authorID,
       usePosts[_postID].postInfo,
       usePosts[_postID].whoLike.length,
       usePosts[_postID].whoLike,
       usePosts[_postID].msgs.length,
-      usePosts[_postID].pic
+      usePosts[_postID].pic,
+      usePosts[_postID].origPicID
     );
   }
 
