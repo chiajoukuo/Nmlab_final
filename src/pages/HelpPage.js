@@ -34,6 +34,12 @@ class HelpPage extends Component{
                 <p className='help_text'>Users can upload images from their devices and use them to create posts. </p>
                 <h3 className='help_topic'>Setting : </h3>
                 <p className='help_text'>In our DApp, accounts are binded to Ethereum accounts. Please don't worry about not setting accounts and passwards. </p>
+                <p className='help_text'>Moreover, Users can rename and change their profile pictures in the Setting Page.</p>
+                <h3 className='help_topic'>Personal Page : </h3>
+                <p className='help_text'>In My Images, the pictures uploaded by the User will be shown here.</p>
+                <p className='help_text'>In My Posts, the posts whose contents are the bought images will be shown here.</p>
+                <p className='help_text'>In Images I bought, the pictures bought by the User from others will be shown here.</p>
+                
                 <div className='bgg'></div>
             </>
         );
