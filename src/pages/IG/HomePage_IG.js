@@ -116,6 +116,7 @@ class HomePageIG extends Component{
                         }
                     )}
                 </div>
+                <div className='bgg'></div>
             </>
         );
     }

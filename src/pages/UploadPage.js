@@ -260,7 +260,7 @@ class UploadPage extends React.Component {
             </article>
             <div className='between'></div>
             <div className='foot'></div>
-
+            <div className='bgg'></div>
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader onClick={this.toggle}>
                         Upload your own image.

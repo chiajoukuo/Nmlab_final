@@ -149,7 +149,7 @@ class NewPostPage extends React.Component {
             </div>     
             <div className='between'></div>
             <div className='foot'></div>
-
+            <div className='bgg'></div>
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
               <ModalHeader onClick={this.toggle}>
                   Choose one image.

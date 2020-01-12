@@ -174,6 +174,7 @@ class PrivatePage extends React.Component {
               )}
           </StackGrid>
           <div className='between'></div>
+          <div className='bgg'></div>
       </div>
     );
   }

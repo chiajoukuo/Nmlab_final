@@ -243,6 +243,7 @@ class SettingPage extends Component{
                     </div>
                     
                 </div>
+                <div className='bgg'></div>
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
                     <ModalHeader onClick={this.toggle}>
                         Upload your avatar.
