@@ -16,33 +16,41 @@ import {
 } from 'reactstrap';
 import { IoLogoGithub } from "react-icons/io";
 import '../css/style.css'
+import '../pages/IG/component/IG_style.css';
+import { Icon } from 'react-icons-kit'
+import {ic_settings} from 'react-icons-kit/md/ic_settings'
+import {ic_live_help} from 'react-icons-kit/md/ic_live_help'
+import {ic_help_outline} from 'react-icons-kit/md/ic_help_outline'
 
 class MyNavbar extends Component {
-    state = {
-      isOpen: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      //photo:"https://www.flaticon.com/premium-icon/icons/svg/1144/1144811.svg"//https://3.bp.blogspot.com/-Aep5iCmfvHc/WXlHL2rDogI/AAAAAAAI-rU/oJ-bkMFY7JclOUs2OL0T7676vLcv2wruACLcBGAs/s1600/AS002891_05.gif",
+      photo:"https://image.flaticon.com/icons/svg/149/149071.svg"
     }
-  
+  }
     toggle = () => {
       this.setState({
-        isOpen: !this.state.isOpen
+        isOpen: !this.state.isOpen,
       });
     }
+    UNSAFE_componentWillMount = async () => {
+      var author = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
+      if(author){
+        var author_photo = author[1]
+        if(author[1]!==""){
+          this.setState({
+            photo:author_photo,
+          })
+        }
+      }
+
+
+    };
   
     render() {
-      //const { isAuthenticated, user } = this.props.auth;
-  
-    //   const authLinks = (
-    //     <Fragment>
-    //       <NavItem>
-    //         <span className="navbar-text mr-3">
-    //           <strong>{user ? `Welcome ${user.name}` : ''}</strong>
-    //         </span>
-    //       </NavItem>
-    //       <NavItem>
-    //         <Logout history={this.props.history} />
-    //       </NavItem>
-    //     </Fragment>
-    //   )
   
       return (
         <div className='navbar_div'>
@@ -77,8 +85,21 @@ class MyNavbar extends Component {
                     <NavLink href="/login" style={{ fontSize: "1.2rem" }}>Logout</NavLink>
                   </NavItem> */}
                   <NavItem>
+                    <NavLink href="/help">
+                      <Icon icon={ic_help_outline} size={23}/>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/setting">
+                      <Icon icon={ic_settings} size={20}/>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
                     <NavLink href="/profile">
-                      <IoLogoGithub size={25} />
+                      {/* <IoLogoGithub size={25} /> */}
+                      <div className="Post-user-avatar">
+                        <img src={this.state.photo} alt={"avatar"} />
+                      </div>
                     </NavLink>
                   </NavItem>
                 </Nav>
