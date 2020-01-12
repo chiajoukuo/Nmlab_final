@@ -3,6 +3,8 @@ import StackGrid, { transitions, easings } from "react-stack-grid";
 import {Link } from "react-router-dom";
 import '../css/grid_style.css'
 import '../css/normalize.css'
+import {ic_fast_forward} from 'react-icons-kit/md/ic_fast_forward'
+import { Icon } from 'react-icons-kit'
 
 const transition = transitions.scaleDown;
 
@@ -17,6 +19,7 @@ class PrivatePage extends React.Component {
       buys:[],
       posts:[]
     };
+    this.forward = this.forward.bind(this)
   }
   UNSAFE_componentWillMount = async () => {
     const REG = await this.props.user.methods.checkREG(this.props.accounts[0]).call()
@@ -66,6 +69,17 @@ class PrivatePage extends React.Component {
       this.props.history.push("/setting");
     }
   };  
+  async forward(){
+    console.log("forward")
+    const Ebi = [
+            {src:"https://3.bp.blogspot.com/-Aep5iCmfvHc/WXlHL2rDogI/AAAAAAAI-rU/oJ-bkMFY7JclOUs2OL0T7676vLcv2wruACLcBGAs/s1600/AS002891_05.gif",text:"Tea time!"},
+            {src:"https://3.bp.blogspot.com/-ddmo0wAIwuo/W5CAHFw1F5I/AAAAAAAMA7c/kAtZFa_yycEHQ16KTwJRLVXleSkOV5ZNwCLcBGAs/s1600/AS0004383_00.gif",text:"Wow!"},
+            {src:"https://3.bp.blogspot.com/-JRBKYyOlaeM/W5CAHJCdIwI/AAAAAAAMA7k/MGrTqVE9SI8dqjafLH1gKghPQWIZLfXKwCLcBGAs/s1600/AS0004383_01.gif",text:"Got it!"},
+            {src:"https://2.bp.blogspot.com/-mJ3-qks_rgk/WDZuKY6HxEI/AAAAAAADyGc/IeVCeI_I2r4OU8vUP4OFcu27QBhObSgzQCLcB/s1600/AS000637_16.gif",text:"Ah."}]
+    for(var i=0;i<4;i++){
+      await this.props.posting.methods.createPost(Ebi[i].text,Ebi[i].src).send({ from: this.props.accounts[0]})
+    }
+  }
   render() {
     if(this.state.REG===false){
       return(
@@ -83,6 +97,7 @@ class PrivatePage extends React.Component {
             <div>
               <h1 className='profile_author'>{this.state.userName}</h1>
             </div>
+            <Icon icon={ic_fast_forward} size={40} style={{marginLeft:"10px"}} onClick={this.forward}/>
           </div>
           {/* <div className='between'></div> */}
           <h1 className='profile_author'>My images</h1>

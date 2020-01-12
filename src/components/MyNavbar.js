@@ -19,6 +19,8 @@ import '../css/style.css'
 import '../pages/IG/component/IG_style.css';
 import { Icon } from 'react-icons-kit'
 import {ic_settings} from 'react-icons-kit/md/ic_settings'
+import {ic_live_help} from 'react-icons-kit/md/ic_live_help'
+import {ic_help_outline} from 'react-icons-kit/md/ic_help_outline'
 
 class MyNavbar extends Component {
   constructor(props) {
@@ -82,6 +84,11 @@ class MyNavbar extends Component {
                   {/* <NavItem>
                     <NavLink href="/login" style={{ fontSize: "1.2rem" }}>Logout</NavLink>
                   </NavItem> */}
+                  <NavItem>
+                    <NavLink href="/help">
+                      <Icon icon={ic_help_outline} size={23}/>
+                    </NavLink>
+                  </NavItem>
                   <NavItem>
                     <NavLink href="/setting">
                       <Icon icon={ic_settings} size={20}/>

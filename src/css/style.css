@@ -74,3 +74,19 @@
     margin-right:10px;
     margin-top:5px;
 }
+/* help page */
+.help_topic{
+    font-family: 'PT Sans', sans-serif;
+    color:rgb(211, 206, 206);
+    float:left;
+    margin-left:30px;
+    margin-right:900px;
+}
+.help_text{
+    font-family: 'PT Sans', sans-serif;
+    color:rgb(211, 206, 206);
+    float:left;
+    margin-left: 50px;
+    text-align: left;
+    margin-bottom: 5px;
+}

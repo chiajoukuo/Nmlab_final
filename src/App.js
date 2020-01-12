@@ -10,6 +10,7 @@ import PrivatePage from './pages/PrivatePage'
 import PublicPage from './pages/PublicPage'
 import UploadPage from './pages/UploadPage';
 import SettingPage from './pages/SettingPage';
+import HelpPage from './pages/HelpPage';
 import NewPostPage from './pages/NewPostPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePageIG from './pages/IG/HomePage_IG'
@@ -74,6 +75,7 @@ class App extends React.Component {
             <div className="App">
               <Switch>
                 <Route exact path='/setting' render={(props) => <SettingPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
+                <Route exact path='/help' render={(props) => <HelpPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/home' render={(props) => <HomePageIG {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/bought_posts' render={(props) => <HomePageBoughtPosts {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/test' component={PicturePage} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>

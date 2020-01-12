@@ -222,7 +222,7 @@ class SettingPage extends Component{
                             type="text"
                             name="user_photo_input"
                             className="setting_input"
-                            placeholder="Enter your photo here."
+                            placeholder="Enter your photo url here or upload by clicking the upload button to generate url."
                             style={{ width: "610px",backgroundColor:"transparent", color:"#d3cfcf" }} // margin:"0px auto",
                             onChange={this.onChange}
                             //onKeyDown={this.handleKeyDown}
