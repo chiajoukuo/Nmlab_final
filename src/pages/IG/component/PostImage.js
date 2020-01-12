@@ -10,7 +10,14 @@ class PostImage extends Component{
             src:this.props.pic//'http://s07.tku.edu.tw/~407610103/images/sg8.png'
         };
     }
-
+    no(e){
+        console.log("no",e)
+        if(e.button == 2){ 
+            console.log("nono")
+            e.preventDefault(); 
+            return false; 
+        } 
+    }
     render(){
         //var link = '/posts/'+this.props.postID
         //console.log('link:',link)
@@ -20,9 +27,9 @@ class PostImage extends Component{
         // console.log(this.props.pic)
         return(
             // <Link to={link}>
-                <div className="Post-image">
+                <div className="Post-image" >
                     <div className="Post-image-bg">
-                        <img alt="post" src={this.state.src} />
+                        <img alt="post" src={this.state.src}/>
                     </div>
                 </div>
             //</Link>
