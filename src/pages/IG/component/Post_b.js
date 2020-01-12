@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import PostHead from './PostHead';
+import PostHeadB from './PostHeadB';
 import PostImage from './PostImage';
 import PostContent from './PostContent';
 import PostButtonB from './PostButtonB';
@@ -24,16 +24,21 @@ class PostB extends Component{
         };
     }
     render(){
-        //console.log(this.state.like)
-        // console.log(this.state.b)
+        console.log(this.props.oriAuthor,this.props.oriAuthorID)
         return(
             <article className="Post" ref="Post">
                 {/* <Route exact path='/test' component={PicturePage}></Route> */}
-                <PostHead authorAddr = {this.state.authorAddr} author ={this.state.author} pic={this.state.author_pic}/>
+                <PostHeadB authorAddr = {this.state.authorAddr} author ={this.state.author} pic={this.state.author_pic}/>
+                <div className='post_credit'>
+                    <span>Image created by </span>
+                    <Link to={'/public_profile/'+this.props.oriAuthorID}>
+                        {this.props.oriAuthor}
+                    </Link>
+                </div>
                 <Link to={'/bought_posts/'+this.state.post_id}>
                     <PostImage pic = {this.state.pic} />
                 </Link>
-                
+
                 <PostButtonB
                     like = {this.state.like} 
                     likeNum = {this.state.likeNum} 

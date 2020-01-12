@@ -14,7 +14,9 @@ class HomePageBoughtPosts extends Component{
             posts_id : [],
             post_num : 0,
             posts: [],
-            likes:[]
+            likes:[],
+            oriAuthors:[],
+            oriIDs:[]
         };
     }
 
@@ -25,11 +27,17 @@ class HomePageBoughtPosts extends Component{
         var posts_tmp = []
         var likes = []
         var authors = []
+        var oris = []
+        var oriIDs=[]
         for (i = 0; i < num; i++) {
             var post_tmp = await this.state.posting.methods.getUsePostByID(i).call()
             var like = await this.state.posting.methods.getUseWhetherUserLike(i,this.state.accounts[0]).call()
             var author = await this.state.user.methods.getAuthorByAddr(post_tmp[0]).call()
-            
+            //console.log(post_tmp)
+            var ori = await this.props.posting.methods.getPostByID(post_tmp[6]).call()
+            //console.log(ori)
+            var oriAuthor = await this.state.user.methods.getAuthorByAddr(ori[0]).call()
+            //console.log(oriAuthor)
             //post_tmp.push(like)
             // var authorID = post_tmp[0]
             // var userNum = post_tmp[1]
@@ -42,6 +50,8 @@ class HomePageBoughtPosts extends Component{
             likes.push(like)
             authors.push(author)
             posts_id.push(i)
+            oris.push(oriAuthor)
+            oriIDs.push(ori[0])
         }
 
         this.setState({
@@ -51,6 +61,8 @@ class HomePageBoughtPosts extends Component{
             posts: posts_tmp,
             likes : likes,
             authors : authors,
+            oriAuthors:oris,
+            oriIDs:oriIDs
         })
     };
 
@@ -79,6 +91,8 @@ class HomePageBoughtPosts extends Component{
                                             pu={this.props.pu}
                                             user={this.props.user} 
                                             accounts={this.props.accounts}
+                                            oriAuthor={this.state.oriAuthors[post_id_element][2]}
+                                            oriAuthorID={this.state.oriIDs[post_id_element]}
                                         />
                                         <div className='between'></div>
                                     </React.Fragment>

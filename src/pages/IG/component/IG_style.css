@@ -1,6 +1,6 @@
-/* .post_head{
-    display:inline;
-} */
+.post_headB{
+    display:flex;
+}
 .Post {
     border-radius: 3px;
     border: 1px solid #e6e6e6;
@@ -12,6 +12,12 @@
 .Post-user {
     display: flex;
     padding: 16px;
+    align-items: center;
+}
+.Post-userB {
+    display: flex;
+    padding-left: 16px;
+    padding-top: 16px;
     align-items: center;
 }
 .Post-user-avatar {
@@ -116,6 +122,12 @@
     text-align: left;
     margin:7px;
     font-family: 'PT Sans', sans-serif;
+}
+.post_credit{
+    text-align: right;
+    margin-right:7px;
+    font-family: 'PT Sans', sans-serif;
+    font-size:5px;
 }
 /* PicturePage */
 .picture_page{

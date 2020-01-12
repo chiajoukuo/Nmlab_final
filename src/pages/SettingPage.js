@@ -1,7 +1,40 @@
 import React,{Component} from 'react';
 import './IG/component/IG_style.css'
 import '../css/style.css'
-import {Button,Input} from "reactstrap";
+import {
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    Form,
+    FormGroup,
+    Label,
+    Input
+  } from "reactstrap";
+import { Icon } from 'react-icons-kit'
+import {upload3} from 'react-icons-kit/icomoon/upload3'
+import {ic_save} from 'react-icons-kit/md/ic_save'
+
+const ipfsAPI = require('ipfs-api');
+const ipfs = ipfsAPI({
+  host: 'localhost',
+  port: '5001',
+  protocol: 'http'
+});
+
+let saveImageToIPFS = (reader) => {
+  return new Promise(function(resolve, reject) {
+      const buffer = Buffer.from(reader.result);
+      //console.log(buffer)
+      ipfs.add(buffer).then((response) => {
+      //console.log(response)
+      resolve(response[0].hash);
+   }).catch((err) => {
+      console.error(err)
+      reject(err);
+   })
+})
+}
 
 class SettingPage extends Component{
     constructor(props) {
@@ -12,42 +45,92 @@ class SettingPage extends Component{
             posting:this.props.posting,
             user:this.props.user,
             user_name_input:'',
-            user_photo_input:''
+            user_photo_input:'',
+            photo:"https://image.flaticon.com/icons/svg/149/149071.svg",
+            upload_img:"",
+            modal:false,
+            isUploading: false,
+            isUploaded: false
         };
         this.save_setting = this.save_setting.bind(this);
+        this.upload = this.upload.bind(this);
+        this.addImage = this.addImage.bind(this)
     }
-    // UNSAFE_componentWillMount = async () => {
-    //     try {
-    //         const web3 = this.props.web3
-    //         const accounts = await web3.eth.getAccounts();
-    //         const networkId = await web3.eth.net.getId();
-    //         const PostingdeployedNetwork = Posting.networks[networkId];
-    //         const UserdeployedNetwork = User.networks[networkId];
-    //         const instance = new web3.eth.Contract(
-    //             Posting.abi,
-    //             PostingdeployedNetwork && PostingdeployedNetwork.address,
-    //         );
-    //         const instance1 = new web3.eth.Contract(
-    //             User.abi,
-    //             UserdeployedNetwork && UserdeployedNetwork.address,
-    //         );
-    //         this.setState({ 
-    //             web3, accounts, 
-    //             posting: instance, 
-    //             user: instance1
-    //         });
-    //         console.log('accounts',accounts)
-    //         console.log(networkId)
-    //         console.log(this.state.posting)
-    //         console.log(this.state.user)
-
-    //     } catch (error) {
-    //         alert(
-    //             `Failed to load web3, accounts, or contract. Check console for details.`,
-    //         );
-    //         console.error(error);
-    //     }
-    // };
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.upload_img!== this.state.upload_img){
+          this.setState({
+            isUploaded: true,
+            isUploading: false
+          })
+        }
+      }
+      loader = () => {
+        const { isUploading, isUploaded } = this.state;
+        if (isUploading) {
+          // isUploading
+          console.log('is uploading')
+          return (
+            <div
+              className="spinner-border text-info"
+              role="status"
+              style={{ marginRight: "1rem", verticalAlign: "bottom ",marginBottom:'10px'  }}
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
+          );
+        } else if (!isUploading && isUploaded) {
+          // !isUploading && isUploaded
+          console.log('is uploaded')
+          return (
+            <img
+              src="https://image.flaticon.com/icons/svg/179/179372.svg"
+              alt='uploading'
+              style={{ width: "24px", margin: "3px", marginRight: "1rem",marginBottom:'10px'  }}
+            />
+          );
+        } else {
+          return null;
+        }
+    };
+    upload (){
+        var file = this.refs.file.files[0];
+        //console.log(this.refs.file.files[0]);
+        if(file){
+          this.setState({
+            isUploading: true,
+            isUploaded: false,
+          });
+          var reader = new FileReader();
+          reader.readAsArrayBuffer(file)
+          reader.onloadend = function(e) {
+          //console.log(reader);
+          //console.log(this.refs.file.files);
+          saveImageToIPFS(reader).then((hash) => {
+            //console.log("hash",hash);
+            this.setState({upload_img: "http://localhost:8080/ipfs/"+hash})
+          });
+          }.bind(this);
+        }
+        else{
+          alert(
+            `Please choose a file before upload.`,
+          );
+        }
+    }
+    toggle = () => {
+        this.setState({
+            modal: !this.state.modal,
+            isUploading: false,
+            isUploaded: false
+        });
+      };
+    addImage(){
+        this.setState({
+            photo:this.state.upload_img,
+            user_photo_input:this.state.upload_img
+        })
+        this.toggle()
+    }
     async save_setting () {
         if(this.state.user_name_input==='' && this.state.user_photo_input===''){
             alert(
@@ -67,6 +150,8 @@ class SettingPage extends Component{
                     user_name_input:'',
                     user_photo_input:''
                 })
+                let path = `/home`;
+                this.props.history.push(path);
             }
             else{
                 if(this.state.user_name_input===''){
@@ -87,17 +172,12 @@ class SettingPage extends Component{
                         user_name_input:'',
                         user_photo_input:''
                     })
+                    let path = `/home`;
+                    this.props.history.push(path);
                 }
             }
+            
         }
-        // console.log(await this.state.user.methods.getAuthorByID(0).call())
-        // console.log(await this.state.user.methods.getAuthorByID(1).call())
-        // console.log(await this.state.user.methods.getAuthorByID(2).call())
-        // console.log(await this.state.user.methods.getAuthorByID(3).call())
-        // console.log(await this.state.user.methods.getAuthorByID(4).call())
-        // console.log(await this.state.user.methods.getAuthorByID(5).call())
-        // console.log(await this.state.user.methods.getAuthorByID(6).call())
-        // console.log(await this.state.user.methods.getAuthorByID(7).call())
         
     }
     onChange = e => {
@@ -129,7 +209,7 @@ class SettingPage extends Component{
                             name="user_name_input"
                             className="setting_input"
                             placeholder="Enter your name here."
-                            style={{ width: "60%",backgroundColor:"transparent", color:"#d3cfcf" }} // margin:"0px auto",
+                            style={{ width: "550px",backgroundColor:"transparent", color:"#d3cfcf" }} // margin:"0px auto",
                             onChange={this.onChange}
                             //onKeyDown={this.handleKeyDown}
                             required
@@ -143,19 +223,60 @@ class SettingPage extends Component{
                             name="user_photo_input"
                             className="setting_input"
                             placeholder="Enter your photo here."
-                            style={{ width: "72%",backgroundColor:"transparent", color:"#d3cfcf" }} // margin:"0px auto",
+                            style={{ width: "610px",backgroundColor:"transparent", color:"#d3cfcf" }} // margin:"0px auto",
                             onChange={this.onChange}
                             //onKeyDown={this.handleKeyDown}
                             required
                         />
+                       <Button size="sm" onClick={this.toggle} style={{ marginLeft: "15px", height:"32px", width:"37px", marginTop:"5px"}} >
+                            <Icon icon={upload3} size={20} />
+                        </Button>
+                        <div className="Post-user-avatar">
+                            <img src={this.state.photo} alt={"avatar"} style={{ marginLeft: "10px", marginTop:"5px"}}/>
+                        </div>
                     </div>
-                    <div className='setting_line'>
-                        <Button size="sm" onClick={this.save_setting} style={{ marginBottom: "5px"}} >
-                        Save
+                    <div className='setting_line' >
+                        <Button size="sm" onClick={this.save_setting} style={{ marginBottom: "5px", marginTop: "5px"}} >
+                            Save
+                            <Icon icon={ic_save} size={20} style={{ marginLeft: "5px"}}/>
                         </Button>
                     </div>
                     
                 </div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader onClick={this.toggle}>
+                        Upload your avatar.
+                    </ModalHeader>
+                    <ModalBody>
+                        <Form>
+                        <FormGroup>
+                            <label id="upload">Select An Image File</label>
+                            <input type="file" name="file" ref="file" id="upload" multiple="multiple" accept=".gif,.png,.jpg"/>
+                            <div>
+                                <img style={{width: 100, marginLeft: "10px", marginTop:'20px'}} src={this.state.upload_img} alt=""/>
+                            </div>
+                            <div
+                            id="upload-btn"
+                            style={{ float: "right", marginTop: "0px" }}
+                            >
+                                {this.loader()}
+                                <Button size="sm" onClick = {this.upload} style={{ marginLeft: "10px", marginBottom:'10px' }}>
+                                    Upload
+                                    <Icon icon={upload3} size={20} style={{ marginLeft: "10px" }}/>
+                                </Button>
+                            </div>
+                        </FormGroup>
+                        </Form>
+                        <Button
+                        color="dark"
+                        style={{ marginTop: "1rem" }}
+                        block
+                        onClick={this.addImage}
+                        >
+                        OK
+                        </Button>
+                    </ModalBody>
+                </Modal>
                     
             </>
         );

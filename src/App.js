@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import PicturePage from './pages/IG/PicturePage';
 import PicturePageB from './pages/IG/PicturePageB';
-import {Switch, Route} from "react-router-dom";
+import {Switch, Route, Redirect} from "react-router-dom";
 import "./css/grid_style.css";
 import MyNavbar from './components/MyNavbar';
 import PrivatePage from './pages/PrivatePage'
@@ -18,6 +18,7 @@ import getWeb3 from "./utils/getWeb3";
 import Posting from "../build/contracts/Posting.json"
 import User from "../build/contracts/User.json"
 import PostingUse from "../build/contracts/PostingUse.json"
+
 
 class App extends React.Component {
   constructor() {
@@ -68,11 +69,11 @@ class App extends React.Component {
         <div className='bg'>
           <BrowserRouter>
             <div className='navbar_div'>
-              <MyNavbar></MyNavbar>
+              <MyNavbar web3={this.state.web3} user={this.state.user} accounts={this.state.accounts}/>
             </div>
             <div className="App">
               <Switch>
-                <Route exact path='/' render={(props) => <SettingPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
+                <Route exact path='/setting' render={(props) => <SettingPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/home' render={(props) => <HomePageIG {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/bought_posts' render={(props) => <HomePageBoughtPosts {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/test' component={PicturePage} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>
@@ -83,6 +84,7 @@ class App extends React.Component {
                 <Route exact path='/profile' render={(props) => <PrivatePage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
                 <Route exact path='/public_profile/:addr?' render={(props) => <PublicPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} accounts={this.state.accounts}/>} />
                 <Route exact path='/new_post' render={(props) => <NewPostPage {...props} web3={this.state.web3} posting={this.state.posting} user={this.state.user} pu={this.state.pu} accounts={this.state.accounts}/>} />
+                <Redirect from='/' to='/setting' />
               </Switch>
             </div>
           </BrowserRouter>

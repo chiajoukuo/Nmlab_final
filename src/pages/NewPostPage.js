@@ -24,7 +24,8 @@ class NewPostPage extends React.Component {
         content:'',
         modal:false,
         value:0,
-        buys:[]
+        buys:[],
+        oriID:-1
 
         // web3:this.props.web3,
         // accounts:this.props.accounts,
@@ -33,19 +34,29 @@ class NewPostPage extends React.Component {
       };
     } 
     UNSAFE_componentWillMount = async () => {
-      var author = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
-      var author_name = author[2]
-      var author_photo = author[1]
-      //----------buy--------
-      this.setState({
-        photo:author_photo,
-        name:author_name
-      })
-      console.log(await this.props.pu.methods.getAllUsePost().call())
+      const REG = await this.props.user.methods.checkREG(this.props.accounts[0]).call()
+      if(REG){
+        var author = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
+        var author_name = author[2]
+        var author_photo = author[1]
+        //----------buy--------
+        this.setState({
+          photo:author_photo,
+          name:author_name
+        })
+      }
+      else{
+        alert(
+          `Set your name and photo first!`,
+        );
+        this.props.history.push("/setting");
+      }
     };
     createPost = async() => {
       console.log("upload")
-      await this.props.pu.methods.createUsePost(this.state.content,this.state.src).send({ from: this.props.accounts[0]})
+      await this.props.pu.methods.createUsePost(this.state.content,this.state.src,this.state.oriID).send({ from: this.props.accounts[0]})
+      let path = `/bought_posts`;
+      this.props.history.push(path);
     }
     click_upload = async() =>{
       var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
@@ -61,9 +72,10 @@ class NewPostPage extends React.Component {
       this.toggle()
 
     }
-    choose_img(src){
+    choose_img(src,oriID){
       this.setState({
-        src:src
+        src:src,
+        oriID:oriID
       })
       this.toggle()
     }
@@ -126,7 +138,7 @@ class NewPostPage extends React.Component {
                 </div>
                 <div>
                 <Button size="sm" onClick={this.createPost} style={{ marginBottom: "5px"}} >
-                  Upload
+                  Post
                   <CloudUploadIcon
                   size="small"
                   style={{ marginLeft: "5px" }}
@@ -161,7 +173,7 @@ class NewPostPage extends React.Component {
                         element => (
                             <figure key={element.src} className="image">
                                 {/* <Link to={"/posts/"+element.post_id}> */}
-                                    <img src={element.src} alt={element.text} onClick={this.choose_img.bind(this,element.src)}/>  
+                                    <img src={element.src} alt={element.text} onClick={this.choose_img.bind(this,element.src,element.post_id)}/>  
                                 {/* </Link> */}
                             </figure>
                         )

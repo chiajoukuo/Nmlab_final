@@ -10,49 +10,69 @@ class PrivatePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: 'username',
-      avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
+      REG:false,
+      userName: '',//'username',
+      avatar: '',//'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzF2pFf814zRqNtePwN2Pr-YkNC3ZckLF09qpzaL2ZpXioAB_M&s',
       photos: [],
       buys:[],
       posts:[]
     };
   }
   UNSAFE_componentWillMount = async () => {
-    var user = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
-    //----------upload---------
-    var upload_ids = await this.props.posting.methods.getPostsByAddr(this.props.accounts[0]).call()
-    var photos = []
-    for(var idx=0; idx<upload_ids.length; idx++){
-      var pid = upload_ids[idx]
-      var post = await this.props.posting.methods.getPostByID(pid).call()
-      photos.push({src:post[6], text:post[2], post_id:pid})
-    }
-    //----------buy---------
-    var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
-    var buys = []
-    for(idx=0; idx<buy_ids.length; idx++){
-      pid = buy_ids[idx]
-      post = await this.props.posting.methods.getPostByID(pid).call()
-      buys.push({src:post[6], text:post[2], post_id:pid})
-    }
-    //----------post---------
-    var post_ids = await this.props.pu.methods.getUsePostsByAddr(this.props.accounts[0]).call()
-    var posts = []
-    for(idx=0; idx<post_ids.length; idx++){
-      pid = post_ids[idx]
-      post = await this.props.pu.methods.getUsePostByID(pid).call()
-      posts.push({src:post[5], text:post[1], post_id:pid})
-    }
+    const REG = await this.props.user.methods.checkREG(this.props.accounts[0]).call()
+    if(REG){
+      var user = await this.props.user.methods.getAuthorByAddr(this.props.accounts[0]).call()
+      //----------upload---------
+      var upload_ids = await this.props.posting.methods.getPostsByAddr(this.props.accounts[0]).call()
+      var photos = []
+      for(var idx=0; idx<upload_ids.length; idx++){
+        var pid = upload_ids[idx]
+        var post = await this.props.posting.methods.getPostByID(pid).call()
+        photos.push({src:post[6], text:post[2], post_id:pid})
+      }
+      //----------buy---------
+      var buy_ids = await this.props.posting.methods.getUserbyAddr(this.props.accounts[0]).call()
+      var buys = []
+      for(idx=0; idx<buy_ids.length; idx++){
+        pid = buy_ids[idx]
+        post = await this.props.posting.methods.getPostByID(pid).call()
+        buys.push({src:post[6], text:post[2], post_id:pid})
+      }
+      //----------post---------
+      var post_ids = await this.props.pu.methods.getUsePostsByAddr(this.props.accounts[0]).call()
+      var posts = []
+      for(idx=0; idx<post_ids.length; idx++){
+        pid = post_ids[idx]
+        post = await this.props.pu.methods.getUsePostByID(pid).call()
+        posts.push({src:post[5], text:post[1], post_id:pid})
+      }
 
-    this.setState({
-      userName : user[2],
-      avatar:user[1],
-      photos:photos,
-      posts:posts,
-      buys:buys
-    })
+      this.setState({
+        REG:true,
+        userName : user[2],
+        avatar:user[1],
+        photos:photos,
+        posts:posts,
+        buys:buys
+      })
+    }
+    else{
+      this.setState({
+        REG:false
+      })
+      alert(
+        `Set your name and photo first!`,
+      );
+      this.props.history.push("/setting");
+    }
   };  
   render() {
+    if(this.state.REG===false){
+      return(
+        <div ></div>
+      )
+
+    }
     return (
       <div>
           <div className='between'></div>

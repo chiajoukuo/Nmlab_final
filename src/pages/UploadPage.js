@@ -16,6 +16,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
+import { useHistory } from 'react-router-dom';
 
 const ipfsAPI = require('ipfs-api');
 const ipfs = ipfsAPI({
@@ -64,45 +65,42 @@ class UploadPage extends React.Component {
     }
 
     UNSAFE_componentWillMount = async () => {
-      var author = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
-      //console.log(author)
-      var author_name = author[2]
-      var author_photo = author[1]
-      //console.log(author_name,author_photo)
-      this.setState({
-        photo:author_photo,
-        name:author_name
-      })
+      const REG = await this.props.user.methods.checkREG(this.props.accounts[0]).call()
+      if(REG){
+        var author = await this.state.user.methods.getAuthorByAddr(this.state.accounts[0]).call()
+        //console.log(author)
+        var author_name = author[2]
+        var author_photo = author[1]
+        //console.log(author_name,author_photo)
+        this.setState({
+          photo:author_photo,
+          name:author_name
+        })
+      }
+      else{
+        alert(
+          `Set your name and photo first!`,
+        );
+        this.props.history.push("/setting");
+      }
+      
     };
 
     componentDidUpdate(prevProps, prevState) {
-      //console.log("state",this.state)
-      //console.log("props",this.props)
-      //console.log(prevState.upload_url, "=>", this.state.upload_url)
-      //console.log(this.state.value)
       if(prevState.upload_url!== this.state.upload_url){
-        //console.log(prevState.upload_url, "=>", this.state.upload_url)
         this.setState({
           isUploaded: true,
           isUploading: false
         })
       }
-      // if (
-      //   this.props.upload.upload !== null &&
-      //   prevProps.upload !== this.props.upload
-      // ) {
-      //   this.setState({
-      //     url: this.props.upload.upload.file,
-      //     isUploading: false,
-      //     isUploaded: true
-      //   });
-      // }
     }
 
     createPost = async() => {
       console.log("upload")
       //this.setState({content:''})
       await this.state.posting.methods.createPost(this.state.content,this.state.url).send({ from: this.state.accounts[0]})
+      let path = `/home`;
+      this.props.history.push(path);
     }
 
     onChange = e => {
@@ -149,7 +147,6 @@ class UploadPage extends React.Component {
         });
     };
     /*  load   */  
-
 
     loader = () => {
         const { isUploading, isUploaded } = this.state;
@@ -261,29 +258,6 @@ class UploadPage extends React.Component {
               </div>
 
             </article>
-            {/* <div style={{marginTop:10}}>上传图片到IPFS：</div>
-            <div>
-              <label id="file">选择图片</label>
-              <input type="file" ref="file" id="file" name="file" multiple="multiple"/>
-            </div>
-            <button onClick={this.handleUpload}>Try</button>
-            <button style={{marginTop:10}} onClick={() => {
-            var file = this.refs.file.files[0];
-            console.log(file);
-            var reader = new FileReader();
-            reader.readAsArrayBuffer(file)
-            reader.onloadend = function(e) {
-              console.log(reader);
-              console.log(this.refs.file.files);
-              
-              saveImageToIPFS(reader).then((hash) => {
-                console.log(hash);
-                this.setState({imageHash: hash})
-              });
-                }.bind(this);
-                
-              }}>开始上传</button>
-               */}
             <div className='between'></div>
             <div className='foot'></div>
 
