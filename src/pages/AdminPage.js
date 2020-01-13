@@ -19,6 +19,7 @@ class AdminPage extends React.Component {
         this.handleCompare = this.handleCompare.bind(this);
         this.handelDelete = this.handelDelete.bind(this);
         this.handleDeleteAll = this.handleDeleteAll.bind(this);
+        this.handleDonate = this.handleDonate.bind(this);
     }
 
     componentWillMount() {
@@ -31,6 +32,10 @@ class AdminPage extends React.Component {
       for (var i=0;i<this.state.delete.length;i++){
         await this.state.posting.methods.deletePost(this.state.delete[i]).send({ from: this.state.accounts[0]});
       }
+    }
+
+    handleDonate = async (event) =>{
+      await this.state.posting.methods.donate().send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
     }
 
     
@@ -63,6 +68,7 @@ class AdminPage extends React.Component {
       // console.log(hash1);
       // console.log(hash2);
       if (hash1!=="" && hash2!==""){
+        console.log(hash1);
         Promise
         .all([hash1, hash2])
         .then((results) => {
@@ -71,10 +77,11 @@ class AdminPage extends React.Component {
             if (dist<12){
               cool = true;
               var joined = this.state.similarPair.concat([[id1, id2, dist]]);
-              this.setState({similarPair: joined, finish: true});
+              this.setState({similarPair: joined});
               if (dist<5){
+                console.log("here");
                 var joind = this.state.delete.concat(id2);
-                this.setState({delete:joind});
+                this.setState({delete:joind, finish: true});
               }
             }
         });
@@ -139,6 +146,7 @@ class AdminPage extends React.Component {
             Posting.abi,
             PostingdeployedNetwork && PostingdeployedNetwork.address,
           );
+          console.log(PostingdeployedNetwork.address)
           this.setState({ web3, accounts, posting: instance });
           this.setState({balance: await this.state.posting.methods.getBalance().call()});
           
@@ -213,6 +221,7 @@ class AdminPage extends React.Component {
               </div>
               )
             })}
+            <button onClick={this.handleDonate}>Donate!</button>
           </div>
         );
     }
