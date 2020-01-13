@@ -14,7 +14,7 @@ contract Posting {
   }
 
   Post[] public posts;
-  uint price = 10000000000000000;
+  uint price = 1000000;
 
   /******************
     post Basic Part
@@ -39,6 +39,7 @@ contract Posting {
 
   function deletePost(uint _postID) public validPostID(_postID) {
     posts[_postID].pic = "";
+    posts[_postID].postInfo = "This post has been deleted";
   }
 
   function getPostByID(uint _postID) public view validPostID(_postID) returns(
@@ -292,7 +293,6 @@ contract Posting {
 
   modifier validPostID(uint _postID){
     require((_postID<posts.length), "postID out of bound");
-    require((bytes(posts[_postID].pic).length>0), "access deleted post");
     _;
   }
 
