@@ -73,7 +73,7 @@ class PostButton extends Component{
         //console.log('toggle')
     }
     purchase = async() =>{
-        await this.state.posting.methods.addUser(this.state.post_id).send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("1", "ether")});
+        await this.state.posting.methods.addUser(this.state.post_id).send({ from: this.state.accounts[0], value : this.state.web3.utils.toWei("0.01", "ether")});
         this.toggle()
         this.props.pur();
     }
@@ -95,7 +95,7 @@ class PostButton extends Component{
                         {/* <img src={this.props.photo} alt='purchase photo' /> */}
                         <PostImage pic = {this.props.photo} />
                         <div>
-                            NT$ 0.01
+                            ETH 0.01
                         </div>
                         <Button size="sm" onClick={this.toggle} style={{ marginBottom: "5px", marginTop:"10px"}} >
                             cancel
