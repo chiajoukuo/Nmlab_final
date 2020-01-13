@@ -16,6 +16,9 @@ $ truffle compile
 $ truffle migrate
 $ npm start (you can modify /src/index.js line 11 to run simple test)
 ```
-
-Then go to http://localhost:3001
-
+Then go to http://localhost:3002
+### How to go to backend
+```
+Comment line 12 and uncomment line 14 in ./index.js.
+Perform steps in how to use.
+```
